@@ -138,3 +138,9 @@ $routes->post('/presensi/update/(:num)', 'Presensi::update/$1');
 $routes->post('/pertemuan/updateStatus/(:num)', 'Pertemuan::updateStatus/$1');
 $routes->get('/pertemuan/scan/(:num)', 'Pertemuan::scan/$1');
 $routes->post('/pertemuan/scanProcess', 'Pertemuan::scanProcess');
+
+$routes->post('materi/store', 'Materi::store');
+$routes->get('materi/delete/(:num)', 'Materi::delete/$1');
+
+$routes->post('tugas/store', 'Tugas::store');
+$routes->get('tugas/delete/(:num)', 'Tugas::delete/$1');

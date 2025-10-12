@@ -8,7 +8,9 @@
         <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
     <?php endif; ?>
 
-    <a href="<?= base_url('kontrak/create'); ?>" class="btn btn-primary mb-3">Tambah Kontrak Jadwal</a>
+    <?php if (session()->get('role') == 'admin') : ?>
+        <a href="<?= base_url('kontrak/create'); ?>" class="btn btn-primary mb-3">Tambah Kontrak Jadwal</a>
+    <?php endif; ?>
 
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
@@ -20,7 +22,6 @@
                 <th>Tahun Ajaran</th>
                 <th>Jam</th>
                 <th>Status</th>
-                <th>Foto</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -40,13 +41,10 @@
                         </span>
                     </td>
                     <td>
-                        <?php if ($k['foto']): ?>
-                            <img src="<?= base_url('uploads/kontrak/' . $k['foto']); ?>" alt="Foto" width="50">
+                        <?php if (session()->get('role') == 'admin') : ?>
+                            <a href="<?= base_url('kontrak/edit/' . $k['id_kontrak_jadwal']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="<?= base_url('kontrak/delete/' . $k['id_kontrak_jadwal']); ?>" onclick="return confirm('Yakin ingin hapus?')" class="btn btn-danger btn-sm">Hapus</a>
                         <?php endif; ?>
-                    </td>
-                    <td>
-                        <a href="<?= base_url('kontrak/edit/' . $k['id_kontrak_jadwal']); ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="<?= base_url('kontrak/delete/' . $k['id_kontrak_jadwal']); ?>" onclick="return confirm('Yakin ingin hapus?')" class="btn btn-danger btn-sm">Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

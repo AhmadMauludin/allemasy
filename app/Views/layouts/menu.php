@@ -4,39 +4,46 @@
             <i class="bi bi-house"></i> <span>Dashboard</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('user') ?>">
-            <i class="bi bi-people"></i> <span>User</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('pesdik') ?>">
-            <i class="bi bi-people"></i> <span>Pesdik</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('guru') ?>">
-            <i class="bi bi-people"></i> <span>Guru</span>
-        </a>
-    </li>
+    <?php if (session()->get('role') == 'admin') : ?>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('user') ?>">
+                <i class="bi bi-people"></i> <span>User</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('pesdik') ?>">
+                <i class="bi bi-people"></i> <span>Pesdik</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('guru') ?>">
+                <i class="bi bi-people"></i> <span>Guru</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('ruangan') ?>">
+                <i class="bi bi-house"></i> <span>Ruangan</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('buku') ?>">
+                <i class="bi bi-book"></i> <span>Buku</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('mapel') ?>">
+                <i class="bi bi-book"></i> <span>Mapel</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('pertemuan') ?>">
+                <i class="bi bi-calendar"></i> <span>Pertemuan</span>
+            </a>
+        </li>
+    <?php endif; ?>
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('kelas') ?>">
             <i class="bi bi-house"></i> <span>Rombel</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('ruangan') ?>">
-            <i class="bi bi-house"></i> <span>Ruangan</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('buku') ?>">
-            <i class="bi bi-book"></i> <span>Buku</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('mapel') ?>">
-            <i class="bi bi-book"></i> <span>Mapel</span>
         </a>
     </li>
     <li class="nav-item">
@@ -49,11 +56,7 @@
             <i class="bi bi-clock"></i> <span>Jadwal</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="<?= base_url('pertemuan') ?>">
-            <i class="bi bi-calendar"></i> <span>Pertemuan</span>
-        </a>
-    </li>
+
 
     <hr>
 

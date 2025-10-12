@@ -7,6 +7,9 @@ use App\Models\JadwalModel;
 use App\Models\PresensiModel;
 use App\Models\PesdikModel;
 use CodeIgniter\Controller;
+use App\Models\MateriModel;
+use App\Models\TugasModel;
+
 
 class Pertemuan extends Controller
 {
@@ -14,6 +17,8 @@ class Pertemuan extends Controller
     protected $jadwalModel;
     protected $presensiModel;
     protected $pesdikModel;
+    protected $materiModel;
+    protected $tugasModel;
 
     public function __construct()
     {
@@ -21,6 +26,9 @@ class Pertemuan extends Controller
         $this->jadwalModel = new JadwalModel();
         $this->presensiModel = new PresensiModel();
         $this->pesdikModel = new PesdikModel();
+        $this->materiModel = new MateriModel();
+        $this->tugasModel = new TugasModel();
+
         helper(['form', 'url']);
     }
 
@@ -178,24 +186,48 @@ class Pertemuan extends Controller
         return redirect()->to('/pertemuan')->with('success', 'Pertemuan berhasil dihapus.');
     }
 
-    // Halaman detail pertemuan + presensi
+    // Halaman detail pertemuan + presensi + materi + tugas
     public function detail($id)
     {
+        // Ambil data pertemuan
         $p = $this->pertemuanModel->find($id);
-        $j = $this->jadwalModel->getDetailById($p['id_jadwal']); // misal kamu punya join ke mapel & kelas
+        if (!$p) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Pertemuan tidak ditemukan");
+        }
 
+        // Ambil data jadwal yang terkait
+        $j = $this->jadwalModel->getDetailById($p['id_jadwal']);
+
+        // Ambil data presensi untuk pertemuan ini
         $presensi = $this->presensiModel
             ->select('tb_presensi.*, tb_pesdik.nama as nama_pesdik')
             ->join('tb_pesdik', 'tb_pesdik.id_pesdik = tb_presensi.id_pesdik')
             ->where('tb_presensi.id_pertemuan', $id)
             ->findAll();
 
+        // Ambil semua materi dari pertemuan ini
+        $materiModel = new \App\Models\MateriModel();
+        $materi = $materiModel
+            ->where('id_pertemuan', $id)
+            ->findAll();
+
+        // Ambil semua tugas dari pertemuan ini
+        $tugasModel = new \App\Models\TugasModel();
+        $tugas = $tugasModel
+            ->where('id_pertemuan', $id)
+            ->findAll();
+
+        // Kirim semua data ke view
         return view('pertemuan/detail', [
             'p' => $p,
             'j' => $j,
-            'presensi' => $presensi
+            'presensi' => $presensi,
+            'materi' => $materi,
+            'tugas' => $tugas
         ]);
     }
+
+
 
     // Update status kehadiran manual (Sakit/Izin/Alfa)
     public function updateStatus($id)

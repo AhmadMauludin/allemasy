@@ -8,7 +8,9 @@
         <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
     <?php endif; ?>
 
-    <a href="<?= base_url('mapel/create'); ?>" class="btn btn-primary mb-3">Tambah Mapel</a>
+    <?php if (session()->get('role') == 'admin') : ?>
+        <a href="<?= base_url('mapel/create'); ?>" class="btn btn-primary mb-3">Tambah Mapel</a>
+    <?php endif; ?>
 
     <table class="table table-bordered table-striped">
         <thead class="table-dark">

@@ -8,7 +8,9 @@
         <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
     <?php endif; ?>
 
-    <a href="<?= base_url('kelas/create') ?>" class="btn btn-primary mb-3">Tambah Kelas</a>
+    <?php if (session()->get('role') == 'admin') : ?>
+        <a href="<?= base_url('kelas/create') ?>" class="btn btn-primary mb-3">Tambah Kelas</a>
+    <?php endif; ?>
 
     <table class="table table-striped table-bordered align-middle">
         <thead class="table-dark">
@@ -40,8 +42,10 @@
                     </td>
                     <td>
                         <a href="<?= base_url('kelas/detail/' . $row['id_kelas']) ?>" class="btn btn-success btn-sm">Detail</a>
-                        <a href="<?= base_url('kelas/edit/' . $row['id_kelas']) ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="<?= base_url('kelas/delete/' . $row['id_kelas']) ?>" onclick="return confirm('Yakin hapus data ini?')" class="btn btn-danger btn-sm">Hapus</a>
+                        <?php if (session()->get('role') == 'admin') : ?>
+                            <a href="<?= base_url('kelas/edit/' . $row['id_kelas']) ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="<?= base_url('kelas/delete/' . $row['id_kelas']) ?>" onclick="return confirm('Yakin hapus data ini?')" class="btn btn-danger btn-sm">Hapus</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

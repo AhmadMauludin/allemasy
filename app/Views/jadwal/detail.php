@@ -1,11 +1,10 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Detail Jadwal</h3>
+<h3>Detail Jadwal <?= esc($jadwal['nama_mapel']) ?></h3>
 
 <div class="card mb-3">
     <div class="card-body">
-        <h5 class="card-title"><?= esc($jadwal['nama_mapel']) ?></h5>
         <p><strong>Guru Pengampu:</strong> <?= esc($jadwal['nama_guru']) ?></p>
         <p><strong>Kelas:</strong> <?= esc($jadwal['nama_kelas']) ?></p>
         <p><strong>Ruangan:</strong> <?= esc($jadwal['nama_ruangan']) ?></p>
@@ -18,6 +17,10 @@
 </div>
 
 <h4>Daftar Pertemuan</h4>
+
+<?php if (session()->get('role') == 'guru') : ?>
+    <a href="<?= base_url('pertemuan/create') ?>" class="btn btn-primary mb-3">Tambah Pertemuan</a>
+<?php endif; ?>
 
 <?php if (count($pertemuan) > 0): ?>
     <table class="table table-bordered table-striped">
@@ -42,8 +45,10 @@
                     <td><?= esc($p['ket']) ?></td>
                     <td>
                         <a href="<?= base_url('pertemuan/detail/' . $p['id_pertemuan']) ?>" class="btn btn-sm btn-info">Detail</a>
-                        <a href="<?= base_url('pertemuan/edit/' . $p['id_pertemuan']) ?>" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="<?= base_url('pertemuan/delete/' . $p['id_pertemuan']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus?')">Hapus</a>
+                        <?php if (session()->get('role') == 'guru') : ?>
+                            <a href="<?= base_url('pertemuan/edit/' . $p['id_pertemuan']) ?>" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="<?= base_url('pertemuan/delete/' . $p['id_pertemuan']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus?')">Hapus</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

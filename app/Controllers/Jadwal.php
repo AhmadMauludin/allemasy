@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\JadwalModel;
 use App\Models\KontrakJadwalModel;
+use App\Models\PesdikModel;
 use App\Models\RuanganModel;
 
 class Jadwal extends BaseController
@@ -11,17 +12,55 @@ class Jadwal extends BaseController
     protected $jadwalModel;
     protected $kontrakModel;
     protected $ruanganModel;
+    protected $pesdikModel;
 
     public function __construct()
     {
         $this->jadwalModel = new JadwalModel();
         $this->kontrakModel = new KontrakJadwalModel();
         $this->ruanganModel = new RuanganModel();
+        $this->pesdikModel = new PesdikModel();
     }
 
     public function index()
     {
-        $data['jadwal'] = $this->jadwalModel->getAllJadwal();
+        $role = session()->get('role');
+        $userId = session()->get('id_user');
+
+        if ($role === 'admin') {
+            // Admin: lihat semua jadwal
+            $data['jadwal'] = $this->jadwalModel->getAllJadwal();
+        } elseif ($role === 'guru') {
+            // Guru: lihat jadwal berdasarkan id_user di kontrak_jadwal
+            $data['jadwal'] = $this->jadwalModel
+                ->select('tb_jadwal.*, tb_mapel.nama_mapel, tb_kelas.nama_kelas, tb_user.username AS nama_guru, tb_ruangan.nama_ruangan')
+                ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
+                ->join('tb_ruangan', 'tb_ruangan.id_ruangan = tb_jadwal.id_ruangan', 'left')
+                ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
+                ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
+                ->join('tb_user', 'tb_user.id_user = tb_kontrak_jadwal.id_user', 'left')
+                ->where('tb_kontrak_jadwal.id_user', $userId)
+                ->findAll();
+        } elseif ($role === 'pesdik') {
+            // Pesdik: lihat jadwal berdasarkan kelasnya
+            $pesdik = $this->pesdikModel->where('id_user', $userId)->first();
+            if ($pesdik) {
+                $data['jadwal'] = $this->jadwalModel
+                    ->select('tb_jadwal.*, tb_mapel.nama_mapel, tb_kelas.nama_kelas, tb_user.username AS nama_guru, tb_ruangan.nama_ruangan')
+                    ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
+                    ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
+                    ->join('tb_ruangan', 'tb_ruangan.id_ruangan = tb_jadwal.id_ruangan', 'left')
+                    ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
+                    ->join('tb_user', 'tb_user.id_user = tb_kontrak_jadwal.id_user', 'left')
+                    ->where('tb_kontrak_jadwal.id_kelas', $pesdik['id_kelas'])
+                    ->findAll();
+            } else {
+                $data['jadwal'] = [];
+            }
+        } else {
+            $data['jadwal'] = [];
+        }
+
         return view('jadwal/index', $data);
     }
 
