@@ -4,17 +4,23 @@ namespace App\Controllers;
 
 use App\Models\PertemuanModel;
 use App\Models\JadwalModel;
+use App\Models\PresensiModel;
+use App\Models\PesdikModel;
 use CodeIgniter\Controller;
 
 class Pertemuan extends Controller
 {
     protected $pertemuanModel;
     protected $jadwalModel;
+    protected $presensiModel;
+    protected $pesdikModel;
 
     public function __construct()
     {
         $this->pertemuanModel = new PertemuanModel();
         $this->jadwalModel = new JadwalModel();
+        $this->presensiModel = new PresensiModel();
+        $this->pesdikModel = new PesdikModel();
         helper(['form', 'url']);
     }
 
@@ -70,6 +76,7 @@ class Pertemuan extends Controller
             $file->move('uploads/pertemuan', $fotoName);
         }
 
+        // Simpan data pertemuan
         $this->pertemuanModel->save([
             'id_jadwal' => $this->request->getPost('id_jadwal'),
             'tanggal' => $this->request->getPost('tanggal'),
@@ -79,7 +86,43 @@ class Pertemuan extends Controller
             'foto' => $fotoName,
         ]);
 
-        return redirect()->to('/pertemuan')->with('success', 'Pertemuan berhasil ditambahkan.');
+        // Ambil ID pertemuan yang baru disimpan
+        $idPertemuan = $this->pertemuanModel->getInsertID();
+
+        // === Proses otomatis membuat data presensi ===
+        $jadwalModel = new \App\Models\JadwalModel();
+        $kontrakModel = new \App\Models\KontrakJadwalModel();
+        $pesdikModel = new \App\Models\PesdikModel();
+        $presensiModel = new \App\Models\PresensiModel();
+
+        // Ambil id_jadwal dari input
+        $idJadwal = $this->request->getPost('id_jadwal');
+
+        // Ambil data jadwal untuk dapat id_kontrak_jadwal
+        $jadwal = $jadwalModel->find($idJadwal);
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan.');
+        }
+
+        // Ambil data kontrak_jadwal untuk dapat id_kelas
+        $kontrak = $kontrakModel->find($jadwal['id_kontrak_jadwal']);
+        if (!$kontrak) {
+            return redirect()->back()->with('error', 'Data kontrak jadwal tidak ditemukan.');
+        }
+
+        // Ambil seluruh pesdik berdasarkan id_kelas
+        $pesdikList = $pesdikModel->where('id_kelas', $kontrak['id_kelas'])->findAll();
+
+        // Simpan ke tb_presensi untuk tiap pesdik
+        foreach ($pesdikList as $pesdik) {
+            $presensiModel->insert([
+                'id_pertemuan' => $idPertemuan,
+                'id_pesdik' => $pesdik['id_pesdik'],
+                'status' => 'pending',
+            ]);
+        }
+
+        return redirect()->to('/pertemuan')->with('success', 'Pertemuan dan presensi berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -135,30 +178,57 @@ class Pertemuan extends Controller
         return redirect()->to('/pertemuan')->with('success', 'Pertemuan berhasil dihapus.');
     }
 
+    // Halaman detail pertemuan + presensi
     public function detail($id)
     {
-        $data = [
-            'title' => 'Edit Pertemuan',
-            'p' => $this->pertemuanModel->find($id),
-            'j' => $this->jadwalModel
-                ->select('tb_jadwal.*, 
-                          tb_kontrak_jadwal.id_tahun_ajaran,
-                          tb_kontrak_jadwal.jumlah_jam,
-                          tb_mapel.nama_mapel,
-                          tb_kelas.nama_kelas,
-                          tb_user.username AS nama_guru,
-                          tb_ruangan.nama_ruangan')
-                ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
-                ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
-                ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
-                ->join('tb_user', 'tb_user.id_user = tb_kontrak_jadwal.id_user', 'left')
-                ->join('tb_ruangan', 'tb_ruangan.id_ruangan = tb_jadwal.id_ruangan', 'left')
-                ->orderBy('FIELD(hari, "Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu")', '', false)
-                ->orderBy('waktu_mulai', 'ASC')
-                ->where('tb_jadwal.id_jadwal', $this->pertemuanModel->find($id)['id_jadwal'])
-                ->first()
-        ];
+        $p = $this->pertemuanModel->find($id);
+        $j = $this->jadwalModel->getDetailById($p['id_jadwal']); // misal kamu punya join ke mapel & kelas
 
-        return view('pertemuan/detail', $data);
+        $presensi = $this->presensiModel
+            ->select('tb_presensi.*, tb_pesdik.nama as nama_pesdik')
+            ->join('tb_pesdik', 'tb_pesdik.id_pesdik = tb_presensi.id_pesdik')
+            ->where('tb_presensi.id_pertemuan', $id)
+            ->findAll();
+
+        return view('pertemuan/detail', [
+            'p' => $p,
+            'j' => $j,
+            'presensi' => $presensi
+        ]);
+    }
+
+    // Update status kehadiran manual (Sakit/Izin/Alfa)
+    public function updateStatus($id)
+    {
+        $status = $this->request->getPost('status');
+        $this->presensiModel->update($id, ['status' => $status]);
+        return redirect()->back()->with('success', 'Status kehadiran diperbarui.');
+    }
+
+    // Halaman scan barcode
+    public function scan($idPertemuan)
+    {
+        return view('pertemuan/scan', ['idPertemuan' => $idPertemuan]);
+    }
+
+    // Proses hasil scan barcode (dikirim via AJAX)
+    public function scanProcess()
+    {
+        $idPesdik = $this->request->getPost('id_pesdik');
+        $idPertemuan = $this->request->getPost('id_pertemuan');
+
+        $presensi = $this->presensiModel
+            ->where('id_pertemuan', $idPertemuan)
+            ->where('id_pesdik', $idPesdik)
+            ->first();
+
+        if ($presensi) {
+            $this->presensiModel->update($presensi['id_presensi'], [
+                'status' => 'hadir'
+            ]);
+            return $this->response->setJSON(['success' => true]);
+        }
+
+        return $this->response->setJSON(['success' => false, 'message' => 'Data presensi tidak ditemukan']);
     }
 }

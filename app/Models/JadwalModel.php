@@ -38,4 +38,20 @@ class JadwalModel extends Model
             ->orderBy('waktu_mulai', 'ASC')
             ->findAll();
     }
+
+    public function getDetailById($id_jadwal)
+    {
+        return $this->select('
+                tb_jadwal.*, 
+                tb_kontrak_jadwal.id_kelas, 
+                tb_kontrak_jadwal.id_mapel, 
+                tb_kelas.nama_kelas, 
+                tb_mapel.nama_mapel
+            ')
+            ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
+            ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
+            ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
+            ->where('tb_jadwal.id_jadwal', $id_jadwal)
+            ->first();
+    }
 }

@@ -43,6 +43,7 @@
                         </span>
                     </td>
                     <td>
+                        <a href="<?= base_url('jadwal/detail/' . $j['id_jadwal']); ?>" class="btn btn-success btn-sm">Detail</a>
                         <a href="<?= base_url('jadwal/edit/' . $j['id_jadwal']); ?>" class="btn btn-warning btn-sm">Edit</a>
                         <a href="<?= base_url('jadwal/delete/' . $j['id_jadwal']); ?>" onclick="return confirm('Hapus jadwal ini?')" class="btn btn-danger btn-sm">Hapus</a>
                     </td>

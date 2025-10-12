@@ -119,6 +119,8 @@ $routes->post('/jadwal/store', 'Jadwal::store');
 $routes->get('/jadwal/edit/(:num)', 'Jadwal::edit/$1');
 $routes->post('/jadwal/update/(:num)', 'Jadwal::update/$1');
 $routes->get('/jadwal/delete/(:num)', 'Jadwal::delete/$1');
+$routes->get('jadwal/detail/(:num)', 'Jadwal::detail/$1');
+
 
 $routes->group('pertemuan', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Pertemuan::index');
@@ -129,3 +131,10 @@ $routes->group('pertemuan', ['filter' => 'auth'], function ($routes) {
     $routes->get('delete/(:num)', 'Pertemuan::delete/$1');
     $routes->get('detail/(:num)', 'Pertemuan::detail/$1');
 });
+
+$routes->get('/presensi/edit/(:num)', 'Presensi::edit/$1');
+$routes->post('/presensi/update/(:num)', 'Presensi::update/$1');
+
+$routes->post('/pertemuan/updateStatus/(:num)', 'Pertemuan::updateStatus/$1');
+$routes->get('/pertemuan/scan/(:num)', 'Pertemuan::scan/$1');
+$routes->post('/pertemuan/scanProcess', 'Pertemuan::scanProcess');

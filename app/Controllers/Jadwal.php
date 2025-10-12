@@ -105,4 +105,40 @@ class Jadwal extends BaseController
         $this->jadwalModel->delete($id);
         return redirect()->to('/jadwal')->with('success', 'Data jadwal berhasil dihapus.');
     }
+    public function detail($id)
+    {
+        $db = \Config\Database::connect();
+
+        // Ambil data jadwal lengkap
+        $jadwal = $db->table('tb_jadwal')
+            ->select('tb_jadwal.*, tb_kontrak_jadwal.id_mapel, tb_kontrak_jadwal.id_user, tb_kontrak_jadwal.id_kelas, tb_ruangan.nama_ruangan, tb_mapel.nama_mapel, tb_guru.nama as nama_guru, tb_kelas.nama_kelas')
+            ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
+            ->join('tb_ruangan', 'tb_ruangan.id_ruangan = tb_jadwal.id_ruangan', 'left')
+            ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
+            ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
+            ->join('tb_user', 'tb_user.id_user = tb_kontrak_jadwal.id_user', 'left')
+            ->join('tb_guru', 'tb_guru.id_user = tb_user.id_user', 'left')
+            ->where('tb_jadwal.id_jadwal', $id)
+            ->get()
+            ->getRowArray();
+
+        if (!$jadwal) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Jadwal tidak ditemukan');
+        }
+
+        // Ambil semua pertemuan yang terkait dengan jadwal ini
+        $pertemuan = $db->table('tb_pertemuan')
+            ->where('id_jadwal', $id)
+            ->orderBy('tanggal', 'DESC')
+            ->get()
+            ->getResultArray();
+
+        $data = [
+            'title' => 'Detail Jadwal',
+            'jadwal' => $jadwal,
+            'pertemuan' => $pertemuan
+        ];
+
+        return view('jadwal/detail', $data);
+    }
 }
