@@ -116,9 +116,7 @@
                         <th>Deadline</th>
                         <th>Status</th>
                         <th>File</th>
-                        <?php if (session()->get('role') == 'guru') : ?>
-                            <th>Aksi</th>
-                        <?php endif; ?>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,14 +134,18 @@
                             </td>
                             <td><?= $t['file'] ? "<a href='" . base_url('uploads/tugas/' . $t['file']) . "' target='_blank'>Lihat</a>" : '-' ?></td>
                             <?php if (session()->get('role') == 'guru') : ?>
-                                <td>
-                                    <a href="<?= base_url('tugas/delete/' . $t['id_tugas']) ?>"
-                                        class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Yakin ingin menghapus tugas ini?')">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                </td>
+                                <a href="<?= base_url('tugas/delete/' . $t['id_tugas']) ?>"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Yakin ingin menghapus tugas ini?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             <?php endif; ?>
+                            <td>
+                                <a href="<?= base_url('pengumpulan_tugas/' . $t['id_tugas']) ?>" class="btn btn-sm btn-info">
+                                    Lihat Pengumpulan
+                                </a>
+                            </td>
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

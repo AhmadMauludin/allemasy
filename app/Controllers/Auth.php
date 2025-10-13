@@ -18,6 +18,7 @@ class Auth extends Controller
     {
         $session = session();
         $userModel = new UserModel();
+        $pesdikModel = new \App\Models\PesdikModel(); // tambahkan ini
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
@@ -25,13 +26,27 @@ class Auth extends Controller
 
         if ($users) {
             if (password_verify($password, $users['password'])) {
-                $session->set([
+
+                // Default data session
+                $dataSession = [
                     'id_user' => $users['id_user'],
                     'username' => $users['username'],
                     'role' => $users['role'],
                     'foto' => $users['foto'],
                     'logged_in' => true
-                ]);
+                ];
+
+                // 🔹 Jika yang login adalah PESDIK, ambil id_pesdik-nya
+                if ($users['role'] === 'pesdik') {
+                    $pesdik = $pesdikModel->where('id_user', $users['id_user'])->first();
+                    if ($pesdik) {
+                        $dataSession['id_pesdik'] = $pesdik['id_pesdik'];
+                        $dataSession['nama_pesdik'] = $pesdik['nama']; // opsional
+                    }
+                }
+
+                // Simpan ke session
+                $session->set($dataSession);
 
                 return redirect()->to('/dashboard');
             } else {

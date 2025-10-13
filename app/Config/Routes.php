@@ -144,3 +144,10 @@ $routes->get('materi/delete/(:num)', 'Materi::delete/$1');
 
 $routes->post('tugas/store', 'Tugas::store');
 $routes->get('tugas/delete/(:num)', 'Tugas::delete/$1');
+
+$routes->get('pengumpulan_tugas/(:num)', 'PengumpulanTugas::index/$1');
+$routes->get('pengumpulan_tugas/create/(:num)', 'PengumpulanTugas::create/$1');
+$routes->post('pengumpulan_tugas/store', 'PengumpulanTugas::store');
+
+$routes->get('pengumpulan_tugas/edit/(:num)', 'PengumpulanTugas::edit/$1');
+$routes->post('pengumpulan_tugas/update/(:num)', 'PengumpulanTugas::update/$1');
