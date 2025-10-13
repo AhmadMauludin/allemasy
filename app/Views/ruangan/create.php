@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="container mt-4">
-    <h3>Tambah Ruangan</h3>
+    <p>Tambah Ruangan</p>
     <form action="<?= base_url('ruangan/store') ?>" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label>Penanggung Jawab</label>

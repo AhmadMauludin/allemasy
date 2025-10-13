@@ -60,7 +60,7 @@
             <hr>
 
             <!-- Jumlah Pesdik -->
-            <h5 class="mt-3 mb-3">Peserta Didik di Rombel Ini</h5>
+            <p class="mt-3 mb-3">Peserta Didik di Rombel Ini</p>
             <p><strong>Jumlah Peserta Didik:</strong> <?= count($pesdik) ?> orang</p>
 
             <?php if (!empty($pesdik)): ?>

@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="container mt-4">
-    <h3>Edit Ruangan</h3>
+    <p>Edit Ruangan</p>
     <form action="<?= base_url('ruangan/update/' . $ruangan['id_ruangan']) ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="foto_lama" value="<?= $ruangan['foto'] ?>">
 

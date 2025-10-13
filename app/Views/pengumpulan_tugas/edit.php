@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="container mt-4">
-    <h3>Edit Pengumpulan Tugas</h3>
+    <p>Edit Pengumpulan Tugas</p>
     <hr>
 
     <form action="<?= base_url('pengumpulan_tugas/update/' . $pengumpulan['id_pengumpulan_tugas']) ?>" method="post" enctype="multipart/form-data">

@@ -20,7 +20,7 @@
         /* Sidebar */
         .sidebar {
             width: 180px;
-            background-color: #0d6efd;
+            background-color: #028c95ff;
             color: white;
             transition: width 0.3s;
             position: relative;

@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Data Pertemuan</h3>
+<p>Data Pertemuan</p>
 <a href="<?= base_url('pertemuan/create') ?>" class="btn btn-primary mb-3">Tambah Pertemuan</a>
 
 <?php if (session()->getFlashdata('success')): ?>

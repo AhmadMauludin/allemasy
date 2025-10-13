@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="container mt-4">
-    <h3>Edit Pesdik</h3>
+    <p>Edit Pesdik</p>
     <form action="<?= base_url('pesdik/update/' . $pesdik['id_pesdik']) ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="foto_lama" value="<?= $pesdik['foto'] ?>">
 

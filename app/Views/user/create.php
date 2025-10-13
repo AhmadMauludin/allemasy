@@ -4,10 +4,7 @@
 <div class="container mt-4">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-person-plus"></i> Tambah User Baru</h5>
-            <a href="<?= base_url('users') ?>" class="btn btn-light btn-sm">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
+            <p class="mb-0"><i class="bi bi-person-plus"></i> Tambah User Baru</p>
         </div>
 
         <div class="card-body">
@@ -46,8 +43,11 @@
                 </div>
 
                 <div class="text-end">
+                    <a href="<?= base_url('user') ?>" class="btn btn-secondary me-2">
+                        Kembali
+                    </a>
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-save"></i> Simpan
+                        Simpan
                     </button>
                 </div>
             </form>

@@ -125,6 +125,7 @@ $routes->get('jadwal/detail/(:num)', 'Jadwal::detail/$1');
 $routes->group('pertemuan', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Pertemuan::index');
     $routes->get('create', 'Pertemuan::create');
+    $routes->get('create/(:num)', 'Pertemuan::create/$1');
     $routes->post('store', 'Pertemuan::store');
     $routes->get('edit/(:num)', 'Pertemuan::edit/$1');
     $routes->post('update/(:num)', 'Pertemuan::update/$1');

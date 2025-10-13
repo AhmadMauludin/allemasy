@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Tambah Guru</h3>
+<p>Tambah Guru</p>
 <form action="<?= base_url('guru/store') ?>" method="post" enctype="multipart/form-data" class="mt-3">
 
     <div class="mb-3">

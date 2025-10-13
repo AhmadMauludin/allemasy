@@ -29,8 +29,8 @@
 
     <div class="card shadow-sm">
         <div class="card-body table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-primary">
+            <table class="table table-striped">
+                <thead class="table-light">
                     <tr>
                         <th>No</th>
                         <th>Nama Lengkap</th>

@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Edit Guru</h3>
+<p>Edit Guru</p>
 <form action="<?= base_url('guru/update/' . $guru['id_guru']) ?>" method="post" enctype="multipart/form-data" class="mt-3">
 
     <div class="mb-3">

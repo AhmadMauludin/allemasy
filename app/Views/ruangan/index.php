@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="container mt-4">
-    <h3>Data Ruangan</h3>
+    <p class="mb-4">Data Ruangan</p>
 
     <?php if (session()->getFlashdata('success')): ?>
         <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
@@ -10,8 +10,8 @@
 
     <a href="<?= base_url('ruangan/create') ?>" class="btn btn-primary mb-3">Tambah Ruangan</a>
 
-    <table class="table table-bordered table-striped align-middle">
-        <thead class="table-dark">
+    <table class="table table-striped align-middle">
+        <thead class="table-light">
             <tr>
                 <th>No</th>
                 <th>Nama Ruangan</th>

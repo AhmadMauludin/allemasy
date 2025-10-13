@@ -9,7 +9,7 @@
             <div class="col-md-3">
                 <div class="card text-center shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title">User</h5>
+                        <p class="card-title">User</p>
                         <p class="display-6"><?= $userCount ?></p>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
             <div class="col-md-3">
                 <div class="card text-center shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title">Guru</h5>
+                        <p class="card-title">Guru</p>
                         <p class="display-6"><?= $guruCount ?></p>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
             <div class="col-md-3">
                 <div class="card text-center shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title">Pesdik</h5>
+                        <p class="card-title">Pesdik</p>
                         <p class="display-6"><?= $pesdikCount ?></p>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
             <div class="col-md-3">
                 <div class="card text-center shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title">Kelas</h5>
+                        <p class="card-title">Kelas</p>
                         <p class="display-6"><?= $kelasCount ?></p>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
             <div class="col-md-3">
                 <div class="card text-center shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title">Ruangan</h5>
+                        <p class="card-title">Ruangan</p>
                         <p class="display-6"><?= $ruanganCount ?></p>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
         <?php if (!empty($kelas)): ?>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5>Wali Kelas: <b><?= esc($kelas['nama_kelas']) ?></b></h5>
+                    <p>Wali Kelas: <b><?= esc($kelas['nama_kelas']) ?></b></p>
                     <p>Jumlah Peserta Didik: <b><?= esc($kelas['jumlah_pesdik']) ?></b></p>
                 </div>
             </div>
@@ -68,7 +68,7 @@
         <?php if (!empty($pesdik)): ?>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5>Rombel Anda:</h5>
+                    <p>Rombel Anda:</p>
                     <p class="fs-5"><b><?= esc($pesdik['nama_kelas']) ?></b></p>
                 </div>
             </div>

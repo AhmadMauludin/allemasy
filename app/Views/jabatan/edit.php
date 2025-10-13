@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Edit Jabatan</h3>
+<p>Edit Jabatan</p>
 <form action="<?= base_url('jabatan/update/' . $jabatan['id_jabatan']) ?>" method="post">
 
     <div class="mb-3">

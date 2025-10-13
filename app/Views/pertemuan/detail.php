@@ -6,7 +6,7 @@
     <!-- Header Pertemuan -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-book-half me-2"></i>Detail Pertemuan</h5>
+            <p class="mb-0"><i class="bi bi-book-half me-2"></i>Detail Pertemuan</p>
         </div>
         <div class="card-body">
             <p><strong>Tanggal:</strong> <?= esc($p['tanggal']); ?></p>
@@ -17,8 +17,8 @@
 
     <!-- Bagian Materi -->
     <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-book-half me-2"></i>Daftar Materi</h5>
+        <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+            <p class="mb-0"><i class="bi bi-book-half me-2"></i>Daftar Materi</p>
         </div>
         <div class="card-body">
             <table class="table table-striped align-middle">
@@ -104,7 +104,7 @@
     <!-- Bagian Tugas -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Daftar Tugas</h5>
+            <p class="mb-0"><i class="bi bi-pencil-square me-2"></i>Daftar Tugas</p>
         </div>
         <div class="card-body">
             <table class="table table-striped align-middle">
@@ -191,7 +191,7 @@
     <!-- Bagian Presensi -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>Daftar Kehadiran</h5>
+            <p class="mb-0"><i class="bi bi-people-fill me-2"></i>Daftar Kehadiran</p>
             <?php if (session()->get('role') == 'guru') : ?>
                 <a href="<?= base_url('pertemuan/scan/' . $p['id_pertemuan']) ?>" class="btn btn-light btn-sm">
                     <i class="bi bi-upc-scan"></i> Scan Kehadiran
@@ -199,7 +199,7 @@
             <?php endif; ?>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover align-middle">
+            <table class="table table-striped align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>No</th>

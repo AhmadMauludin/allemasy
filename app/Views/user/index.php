@@ -3,6 +3,7 @@
 
 <div class="container mt-4">
 
+
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Data user</h4>
@@ -40,7 +41,7 @@
     <div class="card shadow-sm">
         <div class="card-body table-responsive">
             <table class="table table-striped align-middle">
-                <thead class="table-dark text-center">
+                <thead class="table-light text-center">
                     <tr>
                         <th width="5%">#</th>
                         <th width="10%">Foto</th>

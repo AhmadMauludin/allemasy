@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Data Jabatan</h3>
+    <p>Data Jabatan</p>
     <a href="<?= base_url('jabatan/create') ?>" class="btn btn-primary">+ Tambah Jabatan</a>
 </div>
 

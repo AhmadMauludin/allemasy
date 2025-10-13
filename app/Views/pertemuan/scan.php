@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Scan Barcode Kehadiran</h3>
+<p>Scan Barcode Kehadiran</p>
 <p>Silakan arahkan kamera ke barcode ID Peserta Didik. Setelah berhasil, status kehadiran otomatis akan diperbarui menjadi <b>Hadir</b>.</p>
 
 <div id="scanner" style="width:100%; max-width:500px; margin:auto;"></div>
