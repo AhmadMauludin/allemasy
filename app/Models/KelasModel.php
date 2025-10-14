@@ -10,6 +10,7 @@ class KelasModel extends Model
     protected $primaryKey = 'id_kelas';
     protected $allowedFields = [
         'nama_kelas',
+        'jenis_kelas',
         'tingkat',
         'id_user',
         'id_ruangan',

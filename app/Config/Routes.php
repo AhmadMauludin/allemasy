@@ -184,3 +184,6 @@ $routes->post('dispensasi/store', 'Dispensasi::store');
 $routes->get('dispensasi/edit/(:num)', 'Dispensasi::edit/$1');
 $routes->post('dispensasi/update/(:num)', 'Dispensasi::update/$1');
 $routes->get('dispensasi/delete/(:num)', 'Dispensasi::delete/$1');
+
+$routes->post('kelas_pesdik/store', 'KelasPesdik::store');
+$routes->get('kelas_pesdik/delete/(:num)', 'KelasPesdik::delete/$1');

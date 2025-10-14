@@ -42,9 +42,14 @@ class Jadwal extends BaseController
                 ->where('tb_kontrak_jadwal.id_user', $userId)
                 ->findAll();
         } elseif ($role === 'pesdik') {
-            // Pesdik: lihat jadwal berdasarkan kelasnya
-            $pesdik = $this->pesdikModel->where('id_user', $userId)->first();
-            if ($pesdik) {
+            // Pesdik: lihat jadwal berdasarkan kelas yang di-enroll (kelas_pesdik)
+            $pesdik = $this->pesdikModel
+                ->select('tb_kelas_pesdik.id_kelas')
+                ->join('tb_kelas_pesdik', 'tb_kelas_pesdik.id_pesdik = tb_pesdik.id_pesdik', 'left')
+                ->where('tb_pesdik.id_user', $userId)
+                ->first();
+
+            if ($pesdik && !empty($pesdik['id_kelas'])) {
                 $data['jadwal'] = $this->jadwalModel
                     ->select('tb_jadwal.*, tb_mapel.nama_mapel, tb_kelas.nama_kelas, tb_user.username AS nama_guru, tb_ruangan.nama_ruangan')
                     ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
@@ -144,11 +149,11 @@ class Jadwal extends BaseController
         $this->jadwalModel->delete($id);
         return redirect()->to('/jadwal')->with('success', 'Data jadwal berhasil dihapus.');
     }
+
     public function detail($id)
     {
         $db = \Config\Database::connect();
 
-        // Ambil data jadwal lengkap
         $jadwal = $db->table('tb_jadwal')
             ->select('tb_jadwal.*, tb_kontrak_jadwal.id_mapel, tb_kontrak_jadwal.id_user, tb_kontrak_jadwal.id_kelas, tb_ruangan.nama_ruangan, tb_mapel.nama_mapel, tb_guru.nama as nama_guru, tb_kelas.nama_kelas')
             ->join('tb_kontrak_jadwal', 'tb_kontrak_jadwal.id_kontrak_jadwal = tb_jadwal.id_kontrak_jadwal', 'left')
@@ -165,7 +170,6 @@ class Jadwal extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Jadwal tidak ditemukan');
         }
 
-        // Ambil semua pertemuan yang terkait dengan jadwal ini
         $pertemuan = $db->table('tb_pertemuan')
             ->where('id_jadwal', $id)
             ->orderBy('tanggal', 'DESC')

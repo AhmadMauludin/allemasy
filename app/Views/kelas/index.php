@@ -20,6 +20,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>No</th>
+                        <th>Jenis Kelas</th>
                         <th>Nama Kelas</th>
                         <th>Tingkat</th>
                         <th>Wali Kelas</th>
@@ -34,6 +35,7 @@
                     foreach ($kelas as $row): ?>
                         <tr>
                             <td><?= $no++ ?></td>
+                            <td><?= esc(ucfirst($row['jenis_kelas'])) ?></td>
                             <td><?= esc($row['nama_kelas']) ?></td>
                             <td><?= esc($row['tingkat']) ?></td>
                             <td><?= esc($row['wali_kelas']) ?></td>

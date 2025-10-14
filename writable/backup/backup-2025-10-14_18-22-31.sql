@@ -47,6 +47,35 @@ INSERT INTO `tb_buku` VALUES (1,'Aplikasi Seminar Prakerin Berbasis Web','Ahmad 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_dispensasi`
+--
+
+DROP TABLE IF EXISTS `tb_dispensasi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_dispensasi` (
+  `id_dispensasi` int(11) NOT NULL AUTO_INCREMENT,
+  `id_user_pesdik` int(11) NOT NULL,
+  `tanggal` date NOT NULL,
+  `alasan` text NOT NULL,
+  `id_user_guru` int(11) NOT NULL,
+  `status` enum('pending','aktif','nonaktif') DEFAULT 'pending',
+  `ket` text DEFAULT NULL,
+  PRIMARY KEY (`id_dispensasi`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_dispensasi`
+--
+
+LOCK TABLES `tb_dispensasi` WRITE;
+/*!40000 ALTER TABLE `tb_dispensasi` DISABLE KEYS */;
+INSERT INTO `tb_dispensasi` VALUES (7,9,'2025-10-17','lomba',8,'pending','');
+/*!40000 ALTER TABLE `tb_dispensasi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_guru`
 --
 
@@ -96,7 +125,7 @@ CREATE TABLE `tb_jabatan` (
   PRIMARY KEY (`id_jabatan`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `tb_jabatan_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +134,7 @@ CREATE TABLE `tb_jabatan` (
 
 LOCK TABLES `tb_jabatan` WRITE;
 /*!40000 ALTER TABLE `tb_jabatan` DISABLE KEYS */;
-INSERT INTO `tb_jabatan` VALUES (3,8,'Wakasek Kesiswaan','aktif'),(4,7,'Ketua OSIS','aktif');
+INSERT INTO `tb_jabatan` VALUES (3,8,'Wakasek Kesiswaan','aktif'),(4,7,'Ketua OSIS','aktif'),(5,9,'Wakil Ketua Osis','aktif');
 /*!40000 ALTER TABLE `tb_jabatan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,6 +184,7 @@ DROP TABLE IF EXISTS `tb_kelas`;
 CREATE TABLE `tb_kelas` (
   `id_kelas` int(11) NOT NULL AUTO_INCREMENT,
   `nama_kelas` varchar(100) NOT NULL,
+  `jenis_kelas` enum('sekolah','pengajian','ekstrakurikuler') NOT NULL,
   `tingkat` enum('1','2','3','4','5','6') NOT NULL,
   `id_user` int(11) DEFAULT NULL,
   `id_ruangan` int(11) DEFAULT NULL,
@@ -166,7 +196,7 @@ CREATE TABLE `tb_kelas` (
   KEY `id_ruangan` (`id_ruangan`) USING BTREE,
   CONSTRAINT `tb_kelas_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`) ON DELETE SET NULL,
   CONSTRAINT `tb_kelas_ibfk_2` FOREIGN KEY (`id_ruangan`) REFERENCES `tb_ruangan` (`id_ruangan`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,8 +205,114 @@ CREATE TABLE `tb_kelas` (
 
 LOCK TABLES `tb_kelas` WRITE;
 /*!40000 ALTER TABLE `tb_kelas` DISABLE KEYS */;
-INSERT INTO `tb_kelas` VALUES (1,'XI A','5',8,1,'Kelas XI A','aktif','1760023025_2536b5b99833530e5ef9.jpg');
+INSERT INTO `tb_kelas` VALUES (1,'XI A','sekolah','5',8,1,'Kelas XI A','aktif','1760023025_2536b5b99833530e5ef9.jpg'),(2,'Lima','pengajian','5',8,1,'ngaji uuy','aktif','1760461450_383782a564c5bd8110ce.png');
 /*!40000 ALTER TABLE `tb_kelas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_kelas_pesdik`
+--
+
+DROP TABLE IF EXISTS `tb_kelas_pesdik`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_kelas_pesdik` (
+  `id_kelas_pesdik` int(11) NOT NULL AUTO_INCREMENT,
+  `id_kelas` int(11) NOT NULL,
+  `id_pesdik` int(11) NOT NULL,
+  `tanggal_enroll` date DEFAULT NULL,
+  `status` enum('aktif','nonaktif') DEFAULT 'aktif',
+  `keterangan` text DEFAULT NULL,
+  PRIMARY KEY (`id_kelas_pesdik`),
+  KEY `fk_kelas_pesdik_kelas` (`id_kelas`),
+  KEY `fk_kelas_pesdik_pesdik` (`id_pesdik`),
+  CONSTRAINT `fk_kelas_pesdik_kelas` FOREIGN KEY (`id_kelas`) REFERENCES `tb_kelas` (`id_kelas`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_kelas_pesdik_pesdik` FOREIGN KEY (`id_pesdik`) REFERENCES `tb_pesdik` (`id_pesdik`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_kelas_pesdik`
+--
+
+LOCK TABLES `tb_kelas_pesdik` WRITE;
+/*!40000 ALTER TABLE `tb_kelas_pesdik` DISABLE KEYS */;
+INSERT INTO `tb_kelas_pesdik` VALUES (1,1,3,NULL,'aktif',NULL),(2,1,4,NULL,'aktif',NULL);
+/*!40000 ALTER TABLE `tb_kelas_pesdik` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_kompetensi`
+--
+
+DROP TABLE IF EXISTS `tb_kompetensi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_kompetensi` (
+  `id_kompetensi` int(11) NOT NULL AUTO_INCREMENT,
+  `jenis_kompetensi` enum('hafalan','lughotan','praktik','tes tulis') NOT NULL,
+  `id_mapel` int(11) NOT NULL,
+  `id_buku` int(11) DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'aktif',
+  `keterangan` text DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id_kompetensi`),
+  KEY `fk_kompetensi_mapel` (`id_mapel`),
+  KEY `fk_kompetensi_buku` (`id_buku`),
+  CONSTRAINT `fk_kompetensi_buku` FOREIGN KEY (`id_buku`) REFERENCES `tb_buku` (`id_buku`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_kompetensi_mapel` FOREIGN KEY (`id_mapel`) REFERENCES `tb_mapel` (`id_mapel`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_kompetensi`
+--
+
+LOCK TABLES `tb_kompetensi` WRITE;
+/*!40000 ALTER TABLE `tb_kompetensi` DISABLE KEYS */;
+INSERT INTO `tb_kompetensi` VALUES (1,'hafalan',1,1,'aktif','Harus menghafal secara sempurna','1760425878_2c5968a31567729a682c.jpg','2025-10-14 07:11:18','2025-10-14 07:11:18'),(2,'lughotan',1,1,'aktif','',NULL,'2025-10-14 07:45:14','2025-10-14 07:45:14');
+/*!40000 ALTER TABLE `tb_kompetensi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_kompetensi_pesdik`
+--
+
+DROP TABLE IF EXISTS `tb_kompetensi_pesdik`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_kompetensi_pesdik` (
+  `id_kompetensi_pesdik` int(11) NOT NULL AUTO_INCREMENT,
+  `id_kompetensi` int(11) NOT NULL,
+  `id_pesdik` int(11) NOT NULL,
+  `id_guru` int(11) NOT NULL,
+  `nomor_sk` varchar(100) DEFAULT NULL,
+  `status` enum('pending','berjalan','selesai') DEFAULT 'pending',
+  `predikat` enum('cukup','baik','sempurna') DEFAULT NULL,
+  `tanggal_selesai` date DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id_kompetensi_pesdik`),
+  KEY `fk_kompetensi_pesdik_kompetensi` (`id_kompetensi`),
+  KEY `fk_kompetensi_pesdik_guru` (`id_guru`),
+  KEY `fk_kompetensi_pesdik_user` (`id_pesdik`),
+  CONSTRAINT `fk_kompetensi_pesdik_guru` FOREIGN KEY (`id_guru`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_kompetensi_pesdik_kompetensi` FOREIGN KEY (`id_kompetensi`) REFERENCES `tb_kompetensi` (`id_kompetensi`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_kompetensi_pesdik_user` FOREIGN KEY (`id_pesdik`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_kompetensi_pesdik`
+--
+
+LOCK TABLES `tb_kompetensi_pesdik` WRITE;
+/*!40000 ALTER TABLE `tb_kompetensi_pesdik` DISABLE KEYS */;
+INSERT INTO `tb_kompetensi_pesdik` VALUES (4,1,7,8,'21/KP/XI/2025','berjalan','cukup','2025-10-14',NULL,'2025-10-14 07:33:00','2025-10-14 07:33:46');
+/*!40000 ALTER TABLE `tb_kompetensi_pesdik` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -214,7 +350,7 @@ CREATE TABLE `tb_kontrak_jadwal` (
 
 LOCK TABLES `tb_kontrak_jadwal` WRITE;
 /*!40000 ALTER TABLE `tb_kontrak_jadwal` DISABLE KEYS */;
-INSERT INTO `tb_kontrak_jadwal` VALUES (3,1,8,1,1,5,'aktif','','1760077140_ee4a6c748651807d8071.jpg');
+INSERT INTO `tb_kontrak_jadwal` VALUES (3,1,8,1,1,5,'aktif','belajar yang rajin','1760077140_ee4a6c748651807d8071.jpg');
 /*!40000 ALTER TABLE `tb_kontrak_jadwal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,14 +395,11 @@ CREATE TABLE `tb_mapel` (
   `nama_mapel` varchar(100) NOT NULL,
   `golongan` enum('produktif','muatan nasional','muatan lokal') NOT NULL,
   `tingkat` enum('1','2','3','4','5','6') NOT NULL,
-  `id_buku` int(11) DEFAULT NULL,
   `status` enum('aktif','nonaktif') DEFAULT 'aktif',
   `ket` text DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_mapel`),
-  UNIQUE KEY `kode_mapel` (`kode_mapel`),
-  KEY `id_buku` (`id_buku`),
-  CONSTRAINT `tb_mapel_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `tb_buku` (`id_buku`) ON DELETE SET NULL
+  UNIQUE KEY `kode_mapel` (`kode_mapel`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -276,7 +409,7 @@ CREATE TABLE `tb_mapel` (
 
 LOCK TABLES `tb_mapel` WRITE;
 /*!40000 ALTER TABLE `tb_mapel` DISABLE KEYS */;
-INSERT INTO `tb_mapel` VALUES (1,'PR-01','Pemrograman Web','produktif','5',1,'aktif','','1760075847_586c967d171737f5291e.jpg');
+INSERT INTO `tb_mapel` VALUES (1,'PR-01','Pemrograman Web','produktif','5','aktif','','1760075847_586c967d171737f5291e.jpg');
 /*!40000 ALTER TABLE `tb_mapel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -421,7 +554,7 @@ CREATE TABLE `tb_pertemuan` (
   PRIMARY KEY (`id_pertemuan`),
   KEY `id_jadwal` (`id_jadwal`),
   CONSTRAINT `tb_pertemuan_ibfk_1` FOREIGN KEY (`id_jadwal`) REFERENCES `tb_jadwal` (`id_jadwal`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -430,7 +563,7 @@ CREATE TABLE `tb_pertemuan` (
 
 LOCK TABLES `tb_pertemuan` WRITE;
 /*!40000 ALTER TABLE `tb_pertemuan` DISABLE KEYS */;
-INSERT INTO `tb_pertemuan` VALUES (2,1,'2025-10-14','Dijadwalkan','Mantap','Pengenalan CSS','1760253714_9005743e8dd1af8761d9.jpg');
+INSERT INTO `tb_pertemuan` VALUES (2,1,'2025-10-14','Hadir','Mantap','Pengenalan CSS','1760253714_9005743e8dd1af8761d9.jpg'),(6,1,'2025-10-22','Dijadwalkan','yang rajin','Framework CI',NULL);
 /*!40000 ALTER TABLE `tb_pertemuan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -446,7 +579,6 @@ CREATE TABLE `tb_pesdik` (
   `id_user` int(11) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `jk` enum('l','p') NOT NULL,
-  `id_kelas` int(11) DEFAULT NULL,
   `nisn` varchar(20) DEFAULT NULL,
   `nis` varchar(20) DEFAULT NULL,
   `tanggal_lahir` date DEFAULT NULL,
@@ -458,9 +590,8 @@ CREATE TABLE `tb_pesdik` (
   PRIMARY KEY (`id_pesdik`),
   UNIQUE KEY `nisn` (`nisn`),
   UNIQUE KEY `nis` (`nis`),
-  KEY `id_kelas` (`id_kelas`),
-  CONSTRAINT `tb_pesdik_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE,
-  CONSTRAINT `tb_pesdik_ibfk_2` FOREIGN KEY (`id_kelas`) REFERENCES `tb_kelas` (`id_kelas`) ON DELETE SET NULL
+  KEY `tb_pesdik_ibfk_1` (`id_user`),
+  CONSTRAINT `tb_pesdik_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -470,7 +601,7 @@ CREATE TABLE `tb_pesdik` (
 
 LOCK TABLES `tb_pesdik` WRITE;
 /*!40000 ALTER TABLE `tb_pesdik` DISABLE KEYS */;
-INSERT INTO `tb_pesdik` VALUES (3,7,'Saheela Meera','p',1,'0031759504','1809599101','2025-10-09','08118881111','emailsiswa@gmail.com','Cisitu Sumedang','aktif','1760023465_38d02643611e0d4cb31d.jpg'),(4,9,'Siti Fadhilah Kamelia','p',1,'0031759505','1809599102','2025-10-07','08118881111','emailsiswa@gmail.com','Rancakalong Sumedang','aktif','1760023937_c8bf45f3cda97fb53767.jpg');
+INSERT INTO `tb_pesdik` VALUES (3,7,'Saheela Meera','p','0031759504','1809599101','2025-10-09','08118881111','emailsiswa@gmail.com','Cisitu Sumedang','aktif','1760023465_38d02643611e0d4cb31d.jpg'),(4,9,'Siti Fadhilah Kamelia','p','0031759505','1809599102','2025-10-07','08118881111','emailsiswa@gmail.com','Rancakalong Sumedang','aktif','1760023937_c8bf45f3cda97fb53767.jpg');
 /*!40000 ALTER TABLE `tb_pesdik` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,7 +624,7 @@ CREATE TABLE `tb_presensi` (
   KEY `id_pesdik` (`id_pesdik`),
   CONSTRAINT `tb_presensi_ibfk_1` FOREIGN KEY (`id_pertemuan`) REFERENCES `tb_pertemuan` (`id_pertemuan`) ON DELETE CASCADE,
   CONSTRAINT `tb_presensi_ibfk_2` FOREIGN KEY (`id_pesdik`) REFERENCES `tb_pesdik` (`id_pesdik`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,7 +633,7 @@ CREATE TABLE `tb_presensi` (
 
 LOCK TABLES `tb_presensi` WRITE;
 /*!40000 ALTER TABLE `tb_presensi` DISABLE KEYS */;
-INSERT INTO `tb_presensi` VALUES (1,2,3,'hadir','Telat',NULL),(2,2,4,'sakit','Demam','1760258047_0455cd67f6aadc26451b.pdf');
+INSERT INTO `tb_presensi` VALUES (1,2,3,'hadir','Telat',NULL),(2,2,4,'sakit','Demam','1760258047_0455cd67f6aadc26451b.pdf'),(7,6,3,'pending',NULL,NULL),(8,6,4,'pending',NULL,NULL);
 /*!40000 ALTER TABLE `tb_presensi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -596,6 +727,38 @@ INSERT INTO `tb_tugas` VALUES (2,2,'Sistem Manajemen Pelayanan Informasi Pegawai
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_ujikom`
+--
+
+DROP TABLE IF EXISTS `tb_ujikom`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_ujikom` (
+  `id_ujikom` int(11) NOT NULL AUTO_INCREMENT,
+  `id_kompetensi_pesdik` int(11) NOT NULL,
+  `waktu` datetime DEFAULT NULL,
+  `status` enum('dijadwalkan','selesai','ulang') DEFAULT 'dijadwalkan',
+  `rincian` text DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id_ujikom`),
+  KEY `fk_ujikom_kompetensi_pesdik` (`id_kompetensi_pesdik`),
+  CONSTRAINT `fk_ujikom_kompetensi_pesdik` FOREIGN KEY (`id_kompetensi_pesdik`) REFERENCES `tb_kompetensi_pesdik` (`id_kompetensi_pesdik`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_ujikom`
+--
+
+LOCK TABLES `tb_ujikom` WRITE;
+/*!40000 ALTER TABLE `tb_ujikom` DISABLE KEYS */;
+INSERT INTO `tb_ujikom` VALUES (1,4,'2025-10-14 14:43:00','selesai','Bab 1',NULL,'2025-10-14 07:43:32','2025-10-14 07:44:50');
+/*!40000 ALTER TABLE `tb_ujikom` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_user`
 --
 
@@ -633,4 +796,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-13 15:13:57
+-- Dump completed on 2025-10-15  1:22:32

@@ -30,6 +30,9 @@
                             <td><?= esc($kelas['nama_kelas']) ?></td>
                         </tr>
                         <tr>
+                            <th>Jenis Kelas</th>
+                            <td><?= esc(ucfirst($kelas['jenis_kelas'])) ?></td>
+                        <tr>
                             <th>Tingkat</th>
                             <td><?= esc($kelas['tingkat']) ?></td>
                         </tr>

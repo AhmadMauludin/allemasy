@@ -33,10 +33,6 @@
                             <td><?= esc($pesdik['nis']) ?></td>
                         </tr>
                         <tr>
-                            <th>Kelas</th>
-                            <td><?= esc($pesdik['nama_kelas']) ?></td>
-                        </tr>
-                        <tr>
                             <th>Tanggal Lahir</th>
                             <td><?= esc($pesdik['tanggal_lahir']) ?></td>
                         </tr>
@@ -66,8 +62,60 @@
 
             <hr>
 
-            <!-- Jabatan -->
-            <h6 class="mt-3 mb-3">Jabatan Organisasi</h6>
+            <!-- Kelas yang diikuti -->
+            <h6 class="mt-4 mb-3">Kelas yang Diikuti</h6>
+            <?php if (!empty($kelas_diikuti)): ?>
+                <ul class="list-group mb-3">
+                    <?php foreach ($kelas_diikuti as $k): ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= esc($k['nama_kelas']) ?>
+                            <?php if (session()->get('role') === 'admin'): ?>
+                                <a href="<?= base_url('kelas_pesdik/delete/' . $k['id_kelas_pesdik']) ?>"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Yakin ingin menghapus kelas ini dari peserta didik?')">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </a>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p class="text-muted">Belum terdaftar di kelas manapun.</p>
+            <?php endif; ?>
+
+            <?php if (session()->get('role') === 'admin'): ?>
+                <div class="card mt-3">
+                    <div class="card-header bg-success text-white">
+                        Tambah Kelas (Enroll)
+                    </div>
+                    <div class="card-body">
+                        <form action="<?= base_url('kelas_pesdik/store') ?>" method="post">
+                            <input type="hidden" name="id_pesdik" value="<?= esc($pesdik['id_pesdik']) ?>">
+
+                            <div class="mb-3">
+                                <label for="id_kelas" class="form-label">Pilih Kelas</label>
+                                <select name="id_kelas" id="id_kelas" class="form-select" required>
+                                    <option value="">-- Pilih Kelas --</option>
+                                    <?php foreach ($kelas as $k): ?>
+                                        <option value="<?= $k['id_kelas'] ?>">
+                                            <?= esc($k['nama_kelas']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Tambahkan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <hr>
+
+            <!-- Jabatan Organisasi -->
+            <h6 class="mt-4 mb-3">Jabatan Organisasi</h6>
             <?php if (!empty($jabatan)): ?>
                 <ul class="list-group">
                     <?php foreach ($jabatan as $j): ?>
@@ -76,15 +124,12 @@
                                 <?= esc($j['jabatan']) ?>
                                 <span class="badge bg-info ms-2"><?= ucfirst($j['status']) ?></span>
                             </div>
-
                             <?php if (session()->get('role') === 'admin'): ?>
-                                <div>
-                                    <a href="<?= base_url('jabatan/delete/' . $j['id_jabatan']) ?>"
-                                        class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Yakin ingin menghapus jabatan ini?')">
-                                        <i class="bi bi-trash"></i> Hapus
-                                    </a>
-                                </div>
+                                <a href="<?= base_url('jabatan/delete/' . $j['id_jabatan']) ?>"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Yakin ingin menghapus jabatan ini?')">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </a>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
@@ -93,35 +138,20 @@
                 <p class="text-muted">Belum memiliki jabatan aktif.</p>
             <?php endif; ?>
 
-            <?php if (session()->get('role') === 'admin'): ?>
-                <div class="card mt-4">
-                    <div class="card-header bg-primary text-white">
-                        Tambah Jabatan
-                    </div>
+            <?php if (session()->get('role') === 'admin'): ?> <div class="card mt-4">
+                    <div class="card-header bg-primary text-white"> Tambah Jabatan </div>
                     <div class="card-body">
-                        <form action="<?= base_url('jabatan/store') ?>" method="post">
-                            <input type="hidden" name="id_user" value="<?= esc($pesdik['id_user']) ?>">
-
-                            <div class="mb-3">
-                                <label for="jabatan" class="form-label">Nama Jabatan</label>
-                                <input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Masukkan nama jabatan" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select name="status" id="status" class="form-select">
+                        <form action="<?= base_url('jabatan/store') ?>" method="post"> <input type="hidden" name="id_user" value="<?= esc($pesdik['id_user']) ?>">
+                            <div class="mb-3"> <label for="jabatan" class="form-label">Nama Jabatan</label> <input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Masukkan nama jabatan" required> </div>
+                            <div class="mb-3"> <label for="status" class="form-label">Status</label> <select name="status" id="status" class="form-select">
                                     <option value="aktif">Aktif</option>
                                     <option value="nonaktif">Nonaktif</option>
-                                </select>
-                            </div>
-
-                            <button type="submit" class="btn btn-success">Simpan</button>
+                                </select> </div> <button type="submit" class="btn btn-success">Simpan</button>
                         </form>
                     </div>
-                </div>
-            <?php endif; ?>
+                </div> <?php endif; ?>
 
-
+            <!-- Tombol kembali -->
             <div class="mt-4">
                 <a href="<?= site_url('pesdik') ?>" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Kembali

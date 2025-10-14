@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\PesdikModel;
 use App\Models\KelasModel;
+use App\Models\KelasPesdikModel;
 use App\Models\UserModel;
 use App\Models\JabatanModel;
 
@@ -13,29 +14,34 @@ class Pesdik extends BaseController
     protected $kelasModel;
     protected $userModel;
     protected $jabatanModel;
+    protected $kelasPesdikModel;
 
     public function __construct()
     {
         $this->pesdikModel = new PesdikModel();
         $this->kelasModel = new KelasModel();
+        $this->userModel = new UserModel();
+        $this->jabatanModel = new JabatanModel();
+        $this->kelasPesdikModel = new KelasPesdikModel();
     }
 
     public function index()
     {
-        $keyword = $this->request->getGet('keyword'); // Ambil keyword dari form pencarian
-        $perPage = 10; // Jumlah data per halaman
+        $keyword = $this->request->getGet('keyword');
+        $perPage = 10;
 
+        // Ambil data pesdik dan gabungkan kelas yang diikuti
         $builder = $this->pesdikModel
-            ->select('tb_pesdik.*, tb_kelas.nama_kelas')
-            ->join('tb_kelas', 'tb_kelas.id_kelas = tb_pesdik.id_kelas', 'left');
+            ->select('tb_pesdik.*, GROUP_CONCAT(tb_kelas.nama_kelas SEPARATOR ", ") AS nama_kelas')
+            ->join('tb_kelas_pesdik', 'tb_kelas_pesdik.id_pesdik = tb_pesdik.id_pesdik', 'left')
+            ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kelas_pesdik.id_kelas', 'left')
+            ->groupBy('tb_pesdik.id_pesdik');
 
-        // Jika ada pencarian
         if ($keyword) {
             $builder->groupStart()
                 ->like('tb_pesdik.nama', $keyword)
                 ->orLike('tb_pesdik.nis', $keyword)
                 ->orLike('tb_pesdik.telp', $keyword)
-                ->orLike('tb_kelas.nama_kelas', $keyword)
                 ->groupEnd();
         }
 
@@ -47,7 +53,6 @@ class Pesdik extends BaseController
 
         return view('pesdik/index', $data);
     }
-
 
     public function create()
     {
@@ -67,7 +72,6 @@ class Pesdik extends BaseController
 
         $this->pesdikModel->save([
             'id_user' => $this->request->getPost('id_user'),
-            'id_kelas' => $this->request->getPost('id_kelas'),
             'nisn' => $this->request->getPost('nisn'),
             'nis' => $this->request->getPost('nis'),
             'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
@@ -99,7 +103,6 @@ class Pesdik extends BaseController
         }
 
         $this->pesdikModel->update($id, [
-            'id_kelas' => $this->request->getPost('id_kelas'),
             'nama' => $this->request->getPost('nama'),
             'jk' => $this->request->getPost('jk'),
             'nisn' => $this->request->getPost('nisn'),
@@ -123,15 +126,15 @@ class Pesdik extends BaseController
 
     public function detail($id)
     {
-        $pesdikModel = new \App\Models\PesdikModel();
-        $userModel   = new \App\Models\UserModel();
-        $kelasModel  = new \App\Models\KelasModel();
-        $jabatanModel = new \App\Models\JabatanModel();
+        $pesdikModel    = new \App\Models\PesdikModel();
+        $userModel      = new \App\Models\UserModel();
+        $kelasModel     = new \App\Models\KelasModel();
+        $kelasPesdikModel = new \App\Models\KelasPesdikModel();
+        $jabatanModel   = new \App\Models\JabatanModel();
 
         // Ambil data pesdik
         $pesdik = $pesdikModel
-            ->select('tb_pesdik.*, tb_kelas.nama_kelas, tb_user.username')
-            ->join('tb_kelas', 'tb_kelas.id_kelas = tb_pesdik.id_kelas', 'left')
+            ->select('tb_pesdik.*, tb_user.username')
             ->join('tb_user', 'tb_user.id_user = tb_pesdik.id_user', 'left')
             ->find($id);
 
@@ -139,7 +142,19 @@ class Pesdik extends BaseController
             return redirect()->to('/pesdik')->with('error', 'Data peserta didik tidak ditemukan.');
         }
 
-        // Ambil jabatan dari tb_jabatan berdasarkan id_user
+        // Ambil daftar kelas yang diikuti
+        $kelas_diikuti = $kelasPesdikModel
+            ->select('tb_kelas_pesdik.id_kelas_pesdik, tb_kelas.nama_kelas')
+            ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kelas_pesdik.id_kelas', 'left')
+            ->where('tb_kelas_pesdik.id_pesdik', $id)
+            ->findAll();
+
+        $kelas = $kelasModel->findAll();
+
+        // Ambil semua kelas (untuk form enroll jika admin)
+        $semuaKelas = $kelasModel->findAll();
+
+        // Ambil jabatan aktif
         $jabatan = $jabatanModel
             ->where('id_user', $pesdik['id_user'])
             ->where('status', 'aktif')
@@ -148,7 +163,9 @@ class Pesdik extends BaseController
         return view('pesdik/detail', [
             'title' => 'Detail Peserta Didik',
             'pesdik' => $pesdik,
-            'jabatan' => $jabatan
+            'jabatan' => $jabatan,
+            'kelas_diikuti' => $kelas_diikuti,
+            'kelas' => $kelas,
         ]);
     }
 }

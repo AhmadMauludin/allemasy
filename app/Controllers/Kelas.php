@@ -49,6 +49,7 @@ class Kelas extends BaseController
 
         $this->kelasModel->save([
             'nama_kelas' => $this->request->getPost('nama_kelas'),
+            'jenis_kelas' => $this->request->getPost('jenis_kelas'),
             'tingkat' => $this->request->getPost('tingkat'),
             'id_user' => $this->request->getPost('id_user'),
             'id_ruangan' => $this->request->getPost('id_ruangan'),
@@ -80,6 +81,7 @@ class Kelas extends BaseController
 
         $this->kelasModel->update($id, [
             'nama_kelas' => $this->request->getPost('nama_kelas'),
+            'jenis_kelas' => $this->request->getPost('jenis_kelas'),
             'tingkat' => $this->request->getPost('tingkat'),
             'id_user' => $this->request->getPost('id_user'),
             'id_ruangan' => $this->request->getPost('id_ruangan'),
@@ -101,7 +103,9 @@ class Kelas extends BaseController
     {
         $kelasModel = new \App\Models\KelasModel();
         $pesdikModel = new \App\Models\PesdikModel();
+        $kelasPesdikModel = new \App\Models\KelasPesdikModel();
 
+        // Ambil detail kelas lengkap (dengan ruangan dan wali kelas)
         $kelas = $kelasModel
             ->select('tb_kelas.*, tb_ruangan.nama_ruangan, tb_guru.nama AS nama_guru')
             ->join('tb_ruangan', 'tb_ruangan.id_ruangan = tb_kelas.id_ruangan', 'left')
@@ -110,13 +114,20 @@ class Kelas extends BaseController
             ->where('tb_kelas.id_kelas', $id_kelas)
             ->first();
 
-        $pesdik = $pesdikModel
-            ->where('id_kelas', $id_kelas)
+        if (!$kelas) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Kelas tidak ditemukan');
+        }
+
+        // Ambil semua peserta didik yang terdaftar di kelas ini melalui tabel pivot
+        $pesdik = $kelasPesdikModel
+            ->select('tb_pesdik.id_pesdik, tb_pesdik.nama, tb_pesdik.nisn, tb_pesdik.nis, tb_pesdik.foto, tb_pesdik.jk , tb_kelas_pesdik.id_kelas_pesdik')
+            ->join('tb_pesdik', 'tb_pesdik.id_pesdik = tb_kelas_pesdik.id_pesdik', 'left')
+            ->where('tb_kelas_pesdik.id_kelas', $id_kelas)
             ->findAll();
 
         $data = [
-            'title' => 'Detail Kelas',
-            'kelas' => $kelas,
+            'title'  => 'Detail Kelas',
+            'kelas'  => $kelas,
             'pesdik' => $pesdik
         ];
 

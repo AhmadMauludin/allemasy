@@ -7,6 +7,12 @@
         <input type="hidden" name="foto_lama" value="<?= $kelas['foto'] ?>">
 
         <div class="mb-3"><label>Nama Kelas</label><input type="text" name="nama_kelas" value="<?= $kelas['nama_kelas'] ?>" class="form-control" required></div>
+        <div class="mb-3"><label>Jenis Kelas</label><select name="jenis_kelas" class="form-select" required>
+                <option value="sekolah" <?= ($kelas['jenis_kelas'] == 'sekolah') ? 'selected' : '' ?>>Sekolah</option>
+                <option value="pengajian" <?= ($kelas['jenis_kelas'] == 'pengajian') ? 'selected' : '' ?>>Pengajian</option>
+                <option value="ekstrakurikuler" <?= ($kelas['jenis_kelas'] == 'ekstrakurikuler') ? 'selected' : '' ?>>Ekstrakurikuler</option>
+            </select></div>
+
         <div class="mb-3"><label>Tingkat</label><input type="text" name="tingkat" value="<?= $kelas['tingkat'] ?>" class="form-control"></div>
 
         <div class="mb-3">

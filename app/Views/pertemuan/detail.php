@@ -135,16 +135,18 @@
                                 </span>
                             </td>
                             <td><?= $t['file'] ? "<a href='" . base_url('uploads/tugas/' . $t['file']) . "' target='_blank'>Lihat</a>" : '-' ?></td>
-                            <?php if (session()->get('role') == 'guru') : ?>
-                                <a href="<?= base_url('tugas/delete/' . $t['id_tugas']) ?>"
-                                    class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Yakin ingin menghapus tugas ini?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            <?php endif; ?>
                             <td>
+                                <?php if (session()->get('role') == 'guru') : ?>
+
+                                    <a href="<?= base_url('tugas/delete/' . $t['id_tugas']) ?>"
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Yakin ingin menghapus tugas ini?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                <?php endif; ?>
+
                                 <a href="<?= base_url('pengumpulan_tugas/' . $t['id_tugas']) ?>" class="btn btn-sm btn-info">
-                                    Lihat Pengumpulan
+                                    <i class="bi bi-eye"></i>
                                 </a>
                             </td>
 

@@ -8,6 +8,7 @@ use App\Models\UserModel;
 use App\Models\KelasModel;
 use App\Models\PesdikModel;
 use App\Models\TahunAjaranModel;
+use App\Models\KelasPesdikModel;
 
 class KontrakJadwal extends BaseController
 {
@@ -17,7 +18,7 @@ class KontrakJadwal extends BaseController
     protected $kelasModel;
     protected $pesdikModel;
     protected $tahunajaranModel;
-
+    protected $kelasPesdikModel;
 
     public function __construct()
     {
@@ -27,6 +28,7 @@ class KontrakJadwal extends BaseController
         $this->kelasModel = new KelasModel();
         $this->pesdikModel = new PesdikModel();
         $this->tahunajaranModel = new TahunAjaranModel();
+        $this->kelasPesdikModel = new KelasPesdikModel();
     }
 
     public function index()
@@ -35,10 +37,10 @@ class KontrakJadwal extends BaseController
         $userId = session()->get('id_user');
 
         if ($role === 'admin') {
-            // Admin: lihat semua data kontrak
+            // Admin: lihat semua kontrak
             $data['kontrak'] = $this->kontrakModel->getAllKontrak();
         } elseif ($role === 'guru') {
-            // Guru: hanya kontrak yang dimilikinya
+            // Guru: hanya kontrak miliknya
             $data['kontrak'] = $this->kontrakModel
                 ->select('tb_kontrak_jadwal.*, tb_mapel.nama_mapel, tb_kelas.nama_kelas, tb_user.username AS nama_guru, tb_tahun_ajaran.*')
                 ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
@@ -48,28 +50,39 @@ class KontrakJadwal extends BaseController
                 ->where('tb_kontrak_jadwal.id_user', $userId)
                 ->findAll();
         } elseif ($role === 'pesdik') {
-            // Pesdik: hanya kontrak kelas dia
+            // Pesdik: ambil semua kelas yang ia ikuti dari tabel pivot
             $pesdik = $this->pesdikModel->where('id_user', $userId)->first();
+
             if ($pesdik) {
-                $data['kontrak'] = $this->kontrakModel
-                    ->select('tb_kontrak_jadwal.*, tb_mapel.nama_mapel, tb_kelas.nama_kelas, tb_user.username AS nama_guru, tb_tahun_ajaran.*')
-                    ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
-                    ->join('tb_tahun_ajaran', 'tb_tahun_ajaran.id_tahun_ajaran = tb_kontrak_jadwal.id_tahun_ajaran', 'left')
-                    ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
-                    ->join('tb_user', 'tb_user.id_user = tb_kontrak_jadwal.id_user', 'left')
-                    ->where('tb_kontrak_jadwal.id_kelas', $pesdik['id_kelas'])
+                // Ambil daftar id_kelas yang diikuti oleh pesdik ini
+                $kelasList = $this->kelasPesdikModel
+                    ->select('id_kelas')
+                    ->where('id_pesdik', $pesdik['id_pesdik'])
                     ->findAll();
+
+                $kelasIds = array_column($kelasList, 'id_kelas');
+
+                if (!empty($kelasIds)) {
+                    $data['kontrak'] = $this->kontrakModel
+                        ->select('tb_kontrak_jadwal.*, tb_mapel.nama_mapel, tb_kelas.nama_kelas, tb_user.username AS nama_guru, tb_tahun_ajaran.*')
+                        ->join('tb_mapel', 'tb_mapel.id_mapel = tb_kontrak_jadwal.id_mapel', 'left')
+                        ->join('tb_tahun_ajaran', 'tb_tahun_ajaran.id_tahun_ajaran = tb_kontrak_jadwal.id_tahun_ajaran', 'left')
+                        ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kontrak_jadwal.id_kelas', 'left')
+                        ->join('tb_user', 'tb_user.id_user = tb_kontrak_jadwal.id_user', 'left')
+                        ->whereIn('tb_kontrak_jadwal.id_kelas', $kelasIds)
+                        ->findAll();
+                } else {
+                    $data['kontrak'] = [];
+                }
             } else {
                 $data['kontrak'] = [];
             }
         } else {
-            // Role tidak dikenal
             $data['kontrak'] = [];
         }
 
         return view('kontrak_jadwal/index', $data);
     }
-
 
     public function create()
     {

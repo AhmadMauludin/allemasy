@@ -5,6 +5,14 @@
     <p>Tambah Kelas</p>
     <form action="<?= base_url('kelas/store') ?>" method="post" enctype="multipart/form-data">
         <div class="mb-3"><label>Nama Kelas</label><input type="text" name="nama_kelas" class="form-control" required></div>
+
+        <div class="mb-3"><label>Jenis Kelas</label><select name="jenis_kelas" class="form-select" required>
+                <option value="">-- Pilih Jenis Kelas --</option>
+                <option value="sekolah">Sekolah</option>
+                <option value="pengajian">Pengajian</option>
+                <option value="ekstrakurikuler">ekstrakurikuler</option>
+            </select></div>
+
         <div class="mb-3"><label>Tingkat</label><input type="text" name="tingkat" class="form-control"></div>
 
         <div class="mb-3">

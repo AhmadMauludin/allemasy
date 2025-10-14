@@ -6,10 +6,11 @@ use App\Models\PertemuanModel;
 use App\Models\JadwalModel;
 use App\Models\PresensiModel;
 use App\Models\PesdikModel;
-use CodeIgniter\Controller;
 use App\Models\MateriModel;
 use App\Models\TugasModel;
-
+use App\Models\KelasPesdikModel;
+use App\Models\KontrakJadwalModel;
+use CodeIgniter\Controller;
 
 class Pertemuan extends Controller
 {
@@ -19,6 +20,7 @@ class Pertemuan extends Controller
     protected $pesdikModel;
     protected $materiModel;
     protected $tugasModel;
+    protected $kelasPesdikModel;
 
     public function __construct()
     {
@@ -28,6 +30,7 @@ class Pertemuan extends Controller
         $this->pesdikModel = new PesdikModel();
         $this->materiModel = new MateriModel();
         $this->tugasModel = new TugasModel();
+        $this->kelasPesdikModel = new KelasPesdikModel();
 
         helper(['form', 'url']);
     }
@@ -79,7 +82,6 @@ class Pertemuan extends Controller
         return view('pertemuan/create', $data);
     }
 
-
     public function store()
     {
         $file = $this->request->getFile('foto');
@@ -103,16 +105,16 @@ class Pertemuan extends Controller
         $idPertemuan = $this->pertemuanModel->getInsertID();
 
         // === Proses otomatis membuat data presensi ===
-        $jadwalModel = new \App\Models\JadwalModel();
-        $kontrakModel = new \App\Models\KontrakJadwalModel();
-        $pesdikModel = new \App\Models\PesdikModel();
-        $presensiModel = new \App\Models\PresensiModel();
+        $jadwalModel = new KontrakJadwalModel(); // kita butuh kontrak untuk mencari id_kelas nanti
+        $kontrakModel = new KontrakJadwalModel(); // kompatibilitas naming (tetap menggunakan KontrakJadwalModel)
+        $pesdikModel = $this->pesdikModel;
+        $presensiModel = $this->presensiModel;
 
         // Ambil id_jadwal dari input
         $idJadwal = $this->request->getPost('id_jadwal');
 
         // Ambil data jadwal untuk dapat id_kontrak_jadwal
-        $jadwal = $jadwalModel->find($idJadwal);
+        $jadwal = $this->jadwalModel->find($idJadwal);
         if (!$jadwal) {
             return redirect()->back()->with('error', 'Data jadwal tidak ditemukan.');
         }
@@ -123,14 +125,18 @@ class Pertemuan extends Controller
             return redirect()->back()->with('error', 'Data kontrak jadwal tidak ditemukan.');
         }
 
-        // Ambil seluruh pesdik berdasarkan id_kelas
-        $pesdikList = $pesdikModel->where('id_kelas', $kontrak['id_kelas'])->findAll();
+        // Ambil seluruh pesdik berdasarkan enroll di tb_kelas_pesdik
+        $pesdikList = $this->kelasPesdikModel
+            ->select('tb_pesdik.id_pesdik, tb_pesdik.nama, tb_pesdik.nisn, tb_pesdik.nis')
+            ->join('tb_pesdik', 'tb_pesdik.id_pesdik = tb_kelas_pesdik.id_pesdik', 'left')
+            ->where('tb_kelas_pesdik.id_kelas', $kontrak['id_kelas'])
+            ->findAll();
 
-        // Simpan ke tb_presensi untuk tiap pesdik
-        foreach ($pesdikList as $pesdik) {
+        // Simpan ke tb_presensi untuk tiap pesdik (status = pending)
+        foreach ($pesdikList as $pd) {
             $presensiModel->insert([
                 'id_pertemuan' => $idPertemuan,
-                'id_pesdik' => $pesdik['id_pesdik'],
+                'id_pesdik' => $pd['id_pesdik'],
                 'status' => 'pending',
             ]);
         }
@@ -232,8 +238,6 @@ class Pertemuan extends Controller
             'tugas' => $tugas
         ]);
     }
-
-
 
     // Update status kehadiran manual (Sakit/Izin/Alfa)
     public function updateStatus($id)
