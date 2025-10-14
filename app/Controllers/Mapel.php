@@ -8,12 +8,10 @@ use App\Models\BukuModel;
 class Mapel extends BaseController
 {
     protected $mapelModel;
-    protected $bukuModel;
 
     public function __construct()
     {
         $this->mapelModel = new MapelModel();
-        $this->bukuModel = new BukuModel();
     }
 
     public function index()
@@ -24,8 +22,7 @@ class Mapel extends BaseController
 
     public function create()
     {
-        $data['buku'] = $this->bukuModel->findAll();
-        return view('mapel/create', $data);
+        return view('mapel/create');
     }
 
     public function store()
@@ -43,7 +40,6 @@ class Mapel extends BaseController
             'nama_mapel' => $this->request->getPost('nama_mapel'),
             'golongan'   => $this->request->getPost('golongan'),
             'tingkat'    => $this->request->getPost('tingkat'),
-            'id_buku'    => $this->request->getPost('id_buku'),
             'status'     => $this->request->getPost('status'),
             'ket'        => $this->request->getPost('ket'),
             'foto'       => $namaFoto
@@ -55,7 +51,6 @@ class Mapel extends BaseController
     public function edit($id)
     {
         $data['mapel'] = $this->mapelModel->find($id);
-        $data['buku'] = $this->bukuModel->findAll();
         return view('mapel/edit', $data);
     }
 
@@ -80,7 +75,6 @@ class Mapel extends BaseController
             'nama_mapel' => $this->request->getPost('nama_mapel'),
             'golongan'   => $this->request->getPost('golongan'),
             'tingkat'    => $this->request->getPost('tingkat'),
-            'id_buku'    => $this->request->getPost('id_buku'),
             'status'     => $this->request->getPost('status'),
             'ket'        => $this->request->getPost('ket'),
             'foto'       => $namaFoto

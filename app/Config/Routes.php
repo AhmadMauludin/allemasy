@@ -149,6 +149,29 @@ $routes->get('tugas/delete/(:num)', 'Tugas::delete/$1');
 $routes->get('pengumpulan_tugas/(:num)', 'PengumpulanTugas::index/$1');
 $routes->get('pengumpulan_tugas/create/(:num)', 'PengumpulanTugas::create/$1');
 $routes->post('pengumpulan_tugas/store', 'PengumpulanTugas::store');
-
 $routes->get('pengumpulan_tugas/edit/(:num)', 'PengumpulanTugas::edit/$1');
 $routes->post('pengumpulan_tugas/update/(:num)', 'PengumpulanTugas::update/$1');
+
+$routes->group('kompetensi', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Kompetensi::index');
+    $routes->get('create', 'Kompetensi::create');
+    $routes->post('store', 'Kompetensi::store');
+    $routes->get('edit/(:num)', 'Kompetensi::edit/$1');
+    $routes->post('update/(:num)', 'Kompetensi::update/$1');
+    $routes->get('delete/(:num)', 'Kompetensi::delete/$1');
+});
+
+$routes->get('/kompetensi_pesdik/index/(:num)', 'KompetensiPesdik::index/$1');
+$routes->get('/kompetensi_pesdik/create/(:num)', 'KompetensiPesdik::create/$1');
+$routes->post('/kompetensi_pesdik/store', 'KompetensiPesdik::store');
+$routes->get('/kompetensi_pesdik/edit/(:num)', 'KompetensiPesdik::edit/$1');
+$routes->post('/kompetensi_pesdik/update/(:num)', 'KompetensiPesdik::update/$1');
+
+$routes->group('ujikom', ['filter' => 'auth'], function ($routes) {
+    $routes->get('index/(:num)', 'Ujikom::index/$1');
+    $routes->get('create/(:num)', 'Ujikom::create/$1');
+    $routes->post('store', 'Ujikom::store');
+    $routes->get('edit/(:num)', 'Ujikom::edit/$1');
+    $routes->post('update/(:num)', 'Ujikom::update/$1');
+    $routes->get('delete/(:num)', 'Ujikom::delete/$1');
+});

@@ -13,7 +13,6 @@ class MapelModel extends Model
         'nama_mapel',
         'golongan',
         'tingkat',
-        'id_buku',
         'status',
         'ket',
         'foto'
@@ -21,8 +20,7 @@ class MapelModel extends Model
 
     public function getMapelWithBuku()
     {
-        return $this->select('tb_mapel.*, tb_buku.judul AS nama_buku')
-            ->join('tb_buku', 'tb_buku.id_buku = tb_mapel.id_buku', 'left')
+        return $this->select('tb_mapel.*')
             ->findAll();
     }
 }

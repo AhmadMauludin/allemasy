@@ -37,16 +37,6 @@
         </div>
 
         <div class="mb-3">
-            <label>Buku</label>
-            <select name="id_buku" class="form-select">
-                <option value="">-- Pilih Buku --</option>
-                <?php foreach ($buku as $b): ?>
-                    <option value="<?= $b['id_buku']; ?>"><?= esc($b['judul']); ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="mb-3">
             <label>Status</label>
             <select name="status" class="form-select">
                 <option value="aktif">Aktif</option>

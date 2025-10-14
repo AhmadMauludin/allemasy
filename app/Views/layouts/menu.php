@@ -40,6 +40,11 @@
                 <i class="bi bi-calendar"></i> <span>Pertemuan</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('kompetensi') ?>">
+                <i class="bi bi-award"></i> <span>Kompetensi</span>
+            </a>
+        </li>
     <?php endif; ?>
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('kelas') ?>">

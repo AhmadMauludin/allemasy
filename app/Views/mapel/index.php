@@ -20,7 +20,6 @@
                 <th>Nama</th>
                 <th>Golongan</th>
                 <th>Tingkat</th>
-                <th>Buku</th>
                 <th>Status</th>
                 <th>Foto</th>
                 <th>Aksi</th>
@@ -35,7 +34,6 @@
                     <td><?= esc($m['nama_mapel']); ?></td>
                     <td><?= esc($m['golongan']); ?></td>
                     <td><?= esc($m['tingkat']); ?></td>
-                    <td><?= esc($m['nama_buku']); ?></td>
                     <td>
                         <span class="badge bg-<?= $m['status'] == 'aktif' ? 'success' : 'secondary'; ?>">
                             <?= ucfirst($m['status']); ?>
