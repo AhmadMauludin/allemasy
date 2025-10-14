@@ -91,4 +91,19 @@ class KompetensiPesdik extends Controller
         return redirect()->to('/kompetensi_pesdik/index/' . $kp['id_kompetensi'])
             ->with('success', 'Data berhasil diperbarui.');
     }
+    public function delete($id)
+    {
+        // Pastikan model sudah tersedia
+        $kompetensiPesdik = $this->kompetensiPesdikModel->find($id);
+
+        if (!$kompetensiPesdik) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Data tidak ditemukan");
+        }
+
+        // Hapus data
+        $this->kompetensiPesdikModel->delete($id);
+
+        // Redirect kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->back()->with('success', 'Data kompetensi peserta didik berhasil dihapus.');
+    }
 }

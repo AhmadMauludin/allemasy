@@ -3,7 +3,7 @@
 
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-        <p class="mb-0">Data Kompetensi</p>
+        <span>Data Komspanetensi</span>
     </div>
     <div class="card-body">
 

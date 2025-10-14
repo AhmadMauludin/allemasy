@@ -3,7 +3,7 @@
 
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-        <p class="mb-0">Data Kompetensi Peserta Didik - <?= esc($kompetensi['keterangan'] ?? '') ?></p>
+        <span>Data Kompetensi Peserta Didik - <?= esc($kompetensi['keterangan'] ?? '') ?></span>
         <a href="<?= base_url('kompetensi_pesdik/create/' . $id_kompetensi) ?>" class="btn btn-light btn-sm">Tambah Data</a>
     </div>
     <div class="card-body">
@@ -38,6 +38,12 @@
                         <td>
                             <a href="<?= base_url('ujikom/index/' . $kp['id_kompetensi_pesdik']); ?>" class="btn btn-info btn-sm">Lihat Ujikom</a>
                             <a href="<?= base_url('kompetensi_pesdik/edit/' . $kp['id_kompetensi_pesdik']) ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="<?= base_url('kompetensi_pesdik/delete/' . $kp['id_kompetensi_pesdik']); ?>"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                Hapus
+                            </a>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>

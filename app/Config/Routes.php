@@ -166,6 +166,8 @@ $routes->get('/kompetensi_pesdik/create/(:num)', 'KompetensiPesdik::create/$1');
 $routes->post('/kompetensi_pesdik/store', 'KompetensiPesdik::store');
 $routes->get('/kompetensi_pesdik/edit/(:num)', 'KompetensiPesdik::edit/$1');
 $routes->post('/kompetensi_pesdik/update/(:num)', 'KompetensiPesdik::update/$1');
+$routes->get('kompetensi_pesdik/delete/(:num)', 'KompetensiPesdik::delete/$1');
+
 
 $routes->group('ujikom', ['filter' => 'auth'], function ($routes) {
     $routes->get('index/(:num)', 'Ujikom::index/$1');
