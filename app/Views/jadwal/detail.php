@@ -5,20 +5,22 @@
     <div class="card-body">
         <div class="card mb-3">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <p class="mb-0">Detail Jadwal <?= esc($jadwal['nama_mapel']) ?></p>
+                <span>Detail Jadwal</span>
             </div>
             <div class="card-body">
-                <p><strong>Guru Pengampu:</strong> <?= esc($jadwal['nama_guru']) ?></p>
-                <p><strong>Kelas / Ruangan:</strong> <?= esc($jadwal['nama_kelas']) ?> / <?= esc($jadwal['nama_ruangan']) ?></p>
-                <p><strong>Waktu:</strong> <?= esc($jadwal['hari']) ?>, <?= esc($jadwal['jampel']) ?>, Waktu:</strong> <?= esc($jadwal['waktu_mulai']) ?> - <?= esc($jadwal['waktu_selesai']) ?></p>
-                <p><strong>Keterangan:</strong> <?= esc($jadwal['ket']) ?></p>
+                <ul class="list-unstyled mb-1">
+                    <li>Mata Pelajaran : <?= esc($jadwal['nama_mapel']) ?></li>
+                    <li>Guru Pengampu : <?= esc($jadwal['nama_guru']) ?></li>
+                    <li>Kelas / Ruangan : <?= esc($jadwal['nama_kelas']) ?> / <?= esc($jadwal['nama_ruangan']) ?> </li>
+                    <li>Waktu : <?= esc($jadwal['hari']) ?>, <?= esc($jadwal['jampel']) ?>, Waktu: <?= esc($jadwal['waktu_mulai']) ?> - <?= esc($jadwal['waktu_selesai']) ?> </li>
+                    <li>Keterangan : <?= esc($jadwal['ket']) ?> </li>
+                </ul>
             </div>
         </div>
 
         <div class="card mb-3">
-
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <p class="mb-0">Pertemuan</p>
+                <span>Pertemuan</span>
             </div>
             <div class="card-body">
 

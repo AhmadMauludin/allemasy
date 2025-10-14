@@ -9,9 +9,11 @@
             <p class="mb-0"><i class="bi bi-book-half me-2"></i>Detail Pertemuan</p>
         </div>
         <div class="card-body">
-            <p><strong>Tanggal:</strong> <?= esc($p['tanggal']); ?></p>
-            <p><strong>Materi:</strong> <?= esc($p['materi']); ?></p>
-            <p><strong>Keterangan:</strong> <?= esc($p['ket']); ?></p>
+            <ul class="list-unstyled mb-1">
+                <li>Tanggal : <?= esc($p['tanggal']); ?></li>
+                <li>Materi : <?= esc($p['materi']); ?></li>
+                <li>Keterangan : <?= esc($p['ket']); ?></li>
+            </ul>
         </div>
     </div>
 

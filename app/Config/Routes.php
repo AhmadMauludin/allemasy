@@ -177,3 +177,10 @@ $routes->group('ujikom', ['filter' => 'auth'], function ($routes) {
     $routes->post('update/(:num)', 'Ujikom::update/$1');
     $routes->get('delete/(:num)', 'Ujikom::delete/$1');
 });
+
+$routes->get('dispensasi', 'Dispensasi::index');
+$routes->get('dispensasi/create', 'Dispensasi::create');
+$routes->post('dispensasi/store', 'Dispensasi::store');
+$routes->get('dispensasi/edit/(:num)', 'Dispensasi::edit/$1');
+$routes->post('dispensasi/update/(:num)', 'Dispensasi::update/$1');
+$routes->get('dispensasi/delete/(:num)', 'Dispensasi::delete/$1');

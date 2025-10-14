@@ -61,7 +61,11 @@
             <i class="bi bi-clock"></i> <span>Jadwal</span>
         </a>
     </li>
-
+    <li class="nav-item">
+        <a class="nav-link" href="<?= base_url('dispensasi') ?>">
+            <i class="bi bi-bookmark-x"></i> <span>Dispensasi</span>
+        </a>
+    </li>
 
     <hr>
 
