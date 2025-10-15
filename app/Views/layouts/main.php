@@ -14,7 +14,8 @@
         body {
             display: flex;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: auto;
+            /* diperbaiki agar elemen bisa scroll horizontal */
         }
 
         /* Sidebar */
@@ -74,6 +75,11 @@
             margin: 0;
         }
 
+        /* Pastikan tabel bisa scroll */
+        .table-responsive {
+            overflow-x: auto !important;
+        }
+
         /* Font Apple */
         @font-face {
             font-family: "SF Pro";
@@ -84,6 +90,22 @@
 
         body {
             font-family: "SF Pro", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        /* --- Tambahan untuk perbaikan scroll tabel --- */
+        .content {
+            overflow-x: auto !important;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-body {
+            overflow-x: auto;
+            /* agar tabel di dalam card bisa scroll */
         }
     </style>
 </head>
@@ -116,13 +138,11 @@
         const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggleSidebarBtn');
 
-        // Saat pertama kali load, buka sidebar (default) kecuali user sudah pernah tutup sebelumnya
         const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
         }
 
-        // Event toggle
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));

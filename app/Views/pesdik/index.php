@@ -18,14 +18,8 @@
             <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
         <?php endif; ?>
 
-        <?php if (session()->get('role') === 'admin'): ?>
-            <a href="<?= base_url('pesdik/create'); ?>" class="btn btn-primary mb-3">
-                <i class="bi bi-plus-circle"></i> Tambah Peserta Didik
-            </a>
-        <?php endif; ?>
-
         <div class="table-responsive">
-            <table class="table table-striped align-middle">
+            <table class="table table-striped align-middle table-hover">
                 <thead class="table-light">
                     <tr class="text-center">
                         <th>No</th>
@@ -33,7 +27,7 @@
                         <th>NISN / NIS</th>
                         <th>Kelas Diikuti</th>
                         <th>Status</th>
-                        <th style="width: 180px;">Aksi</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

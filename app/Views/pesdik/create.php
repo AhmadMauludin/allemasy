@@ -4,15 +4,6 @@
 <div class="container mt-4">
     <p>Tambah Pesdik</p>
     <form action="<?= base_url('pesdik/store') ?>" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label>Kelas</label>
-            <select name="id_kelas" class="form-select" required>
-                <option value="">-- Pilih Kelas --</option>
-                <?php foreach ($kelas as $k): ?>
-                    <option value="<?= $k['id_kelas'] ?>"><?= $k['nama_kelas'] ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
         <div class="mb-3"><label>NISN</label><input type="text" name="nisn" class="form-control"></div>
         <div class="mb-3"><label>NIS</label><input type="text" name="nis" class="form-control"></div>
         <div class="mb-3"><label>Tanggal Lahir</label><input type="date" name="tanggal_lahir" class="form-control"></div>

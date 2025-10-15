@@ -8,6 +8,12 @@ use App\Models\KelasPesdikModel;
 use App\Models\UserModel;
 use App\Models\JabatanModel;
 
+use App\Controllers\BaseController;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+
 class Pesdik extends BaseController
 {
     protected $pesdikModel;
@@ -166,6 +172,40 @@ class Pesdik extends BaseController
             'jabatan' => $jabatan,
             'kelas_diikuti' => $kelas_diikuti,
             'kelas' => $kelas,
+        ]);
+    }
+
+
+    public function kartu($id)
+    {
+        $pesdik = $this->pesdikModel->find($id);
+        if (!$pesdik) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Peserta didik tidak ditemukan");
+        }
+
+        // Data untuk QR code
+        $dataQr = (string)$pesdik['id_pesdik'];
+
+        // ✅ Cara baru (v6) — semua properti lewat constructor
+        $qrCode = new QrCode(
+            data: $dataQr,
+            encoding: new Encoding('UTF-8'),
+            size: 200,
+            margin: 10,
+            foregroundColor: new Color(0, 0, 0),
+            backgroundColor: new Color(255, 255, 255)
+        );
+
+        // Writer untuk PNG
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+
+        // Convert ke base64 agar bisa ditampilkan di <img>
+        $qrImage = base64_encode($result->getString());
+
+        return view('pesdik/kartu', [
+            'pesdik' => $pesdik,
+            'qrCode' => $qrImage
         ]);
     }
 }

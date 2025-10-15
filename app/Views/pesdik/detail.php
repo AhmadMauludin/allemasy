@@ -15,6 +15,12 @@
                     <?php else: ?>
                         <img src="<?= base_url('uploads/default.png') ?>" alt="Default" class="img-fluid rounded mb-3" style="max-width:150px;">
                     <?php endif; ?>
+                    <p>
+                        <a href="<?= base_url('pesdik/kartu/' . $pesdik['id_pesdik']) ?>" target="_blank" class="btn btn-success btn-sm">
+                            <i class="bi bi-printer"></i> Cetak Kartu
+                        </a>
+                    </p>
+
                 </div>
 
                 <!-- Info utama -->

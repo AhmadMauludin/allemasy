@@ -31,7 +31,7 @@ $routes->get('pesdik/edit/(:num)', 'Pesdik::edit/$1');
 $routes->post('pesdik/update/(:num)', 'Pesdik::update/$1');
 $routes->get('pesdik/delete/(:num)', 'Pesdik::delete/$1');
 $routes->get('pesdik/detail/(:num)', 'Pesdik::detail/$1');
-
+$routes->get('pesdik/kartu/(:num)', 'Pesdik::kartu/$1');
 
 // CRUD KELAS
 $routes->group('kelas', ['filter' => 'auth'], function ($routes) {

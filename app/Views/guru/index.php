@@ -6,9 +6,6 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Data Guru</h4>
-        <a href="<?= base_url('guru/create') ?>" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Tambah
-        </a>
     </div>
     <?php if (session()->getFlashdata('success')): ?>
         <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>

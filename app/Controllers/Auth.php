@@ -19,6 +19,8 @@ class Auth extends Controller
         $session = session();
         $userModel = new UserModel();
         $pesdikModel = new \App\Models\PesdikModel(); // tambahkan ini
+        $guruModel = new \App\Models\GuruModel(); // tambahkan ini
+
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
@@ -42,6 +44,15 @@ class Auth extends Controller
                     if ($pesdik) {
                         $dataSession['id_pesdik'] = $pesdik['id_pesdik'];
                         $dataSession['nama_pesdik'] = $pesdik['nama']; // opsional
+                    }
+                }
+
+                // 🔹 Jika yang login adalah PESDIK, ambil id_pesdik-nya
+                if ($users['role'] === 'guru') {
+                    $guru = $guruModel->where('id_user', $users['id_user'])->first();
+                    if ($guru) {
+                        $dataSession['id_guru'] = $guru['id_guru'];
+                        $dataSession['nama_guru'] = $guru['nama']; // opsional
                     }
                 }
 
