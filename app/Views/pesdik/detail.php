@@ -103,7 +103,10 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-
+                            <div class="mb-3">
+                                <label for="tanggal_enroll" class="form-label">Tanggal Enroll</label>
+                                <input type="date" name="tanggal_enroll" id="tanggal_enroll" class="form-control">
+                            </div>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-plus-circle"></i> Tambahkan
                             </button>

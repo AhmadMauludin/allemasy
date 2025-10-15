@@ -187,3 +187,25 @@ $routes->get('dispensasi/delete/(:num)', 'Dispensasi::delete/$1');
 
 $routes->post('kelas_pesdik/store', 'KelasPesdik::store');
 $routes->get('kelas_pesdik/delete/(:num)', 'KelasPesdik::delete/$1');
+
+
+// ROUTES UNTUK SHOLAT
+$routes->group('sholat', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Sholat::index');                                // daftar semua sholat
+    $routes->get('create', 'Sholat::create');                          // form tambah sholat
+    $routes->post('store', 'Sholat::store');                           // simpan sholat baru + generate presensi otomatis
+    $routes->get('detail/(:num)', 'Sholat::detail/$1');                // detail + daftar presensi
+    $routes->get('edit/(:num)', 'Sholat::edit/$1');                    // edit sholat
+    $routes->post('update/(:num)', 'Sholat::update/$1');               // update sholat
+    $routes->get('delete/(:num)', 'Sholat::delete/$1');                // hapus sholat
+    $routes->get('scan/(:num)', 'Sholat::scan/$1');                    // halaman scan QR presensi
+    $routes->post('prosesScan', 'Sholat::prosesScan'); // ✅ ini yang hilang
+    $routes->post('updateStatus/(:num)', 'Sholat::updateStatus/$1');             // ubah status_sholat jadi 'selesai'
+});
+
+
+// ROUTES UNTUK PRESENSI SHOLAT
+$routes->group('presensi_sholat', ['filter' => 'auth'], function ($routes) {
+    $routes->post('update/(:num)', 'PresensiSholat::update/$1');       // update status & keterangan presensi
+    $routes->get('delete/(:num)', 'PresensiSholat::delete/$1');        // hapus presensi sholat
+});

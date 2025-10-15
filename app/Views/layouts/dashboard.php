@@ -62,8 +62,8 @@
             <div class="alert alert-info">Belum ada jadwal yang diampu.</div>
         <?php else: ?>
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
+                <table class="table table-striped">
+                    <thead class="table-light">
                         <tr>
                             <th>Hari</th>
                             <th>Jam</th>

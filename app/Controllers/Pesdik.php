@@ -144,7 +144,7 @@ class Pesdik extends BaseController
 
         // Ambil daftar kelas yang diikuti
         $kelas_diikuti = $kelasPesdikModel
-            ->select('tb_kelas_pesdik.id_kelas_pesdik, tb_kelas.nama_kelas')
+            ->select('tb_kelas_pesdik.*, tb_kelas.nama_kelas')
             ->join('tb_kelas', 'tb_kelas.id_kelas = tb_kelas_pesdik.id_kelas', 'left')
             ->where('tb_kelas_pesdik.id_pesdik', $id)
             ->findAll();

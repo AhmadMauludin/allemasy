@@ -66,7 +66,11 @@
             <i class="bi bi-bookmark-x"></i> <span>Dispensasi</span>
         </a>
     </li>
-
+    <li class="nav-item">
+        <a class="nav-link" href="<?= base_url('sholat') ?>">
+            <i class="bi bi-person-standing"></i> <span>Sholat</span>
+        </a>
+    </li>
     <hr>
 
     <li class="nav-item">

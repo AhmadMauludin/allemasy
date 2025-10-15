@@ -27,6 +27,7 @@ class KelasPesdik extends BaseController
     {
         $id_pesdik = $this->request->getPost('id_pesdik');
         $id_kelas  = $this->request->getPost('id_kelas');
+        $tanggal_enroll = $this->request->getPost('tanggal_enroll');
 
         // Cegah duplikasi enroll
         $cek = $this->kelasPesdikModel
@@ -42,6 +43,7 @@ class KelasPesdik extends BaseController
         $this->kelasPesdikModel->insert([
             'id_pesdik' => $id_pesdik,
             'id_kelas'  => $id_kelas,
+            'tanggal_enroll' => $tanggal_enroll,
         ]);
 
         return redirect()->back()->with('success', 'Kelas berhasil ditambahkan untuk peserta didik.');
