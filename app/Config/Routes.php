@@ -24,7 +24,7 @@ $routes->get('logout', 'Auth::logout');
 $routes->get('/dashboard', 'Home::index', $authFilter);
 
 // CRUD Pesdik
-$routes->get('pesdik', 'Pesdik::index');
+$routes->get('pesdik', 'Pesdik::index', $admin);
 $routes->get('pesdik/create', 'Pesdik::create');
 $routes->post('pesdik/store', 'Pesdik::store');
 $routes->get('pesdik/edit/(:num)', 'Pesdik::edit/$1');
@@ -209,3 +209,14 @@ $routes->group('presensi_sholat', ['filter' => 'auth'], function ($routes) {
     $routes->post('update/(:num)', 'PresensiSholat::update/$1');       // update status & keterangan presensi
     $routes->get('delete/(:num)', 'PresensiSholat::delete/$1');        // hapus presensi sholat
 });
+
+// Routes Biaya
+$routes->get('biaya', 'Biaya::index');                // Halaman index biaya
+$routes->get('biaya/create', 'Biaya::create');        // Form tambah biaya
+$routes->post('biaya/store', 'Biaya::store');         // Simpan data biaya baru
+$routes->get('biaya/detail/(:num)', 'Biaya::detail/$1'); // Detail biaya
+$routes->get('biaya/delete/(:num)', 'Biaya::delete/$1'); // Hapus biaya
+
+// Routes Pembayaran
+$routes->get('pembayaran/edit/(:num)', 'Pembayaran::edit/$1');   // Form edit pembayaran
+$routes->post('pembayaran/update/(:num)', 'Pembayaran::update/$1'); // Update pembayaran

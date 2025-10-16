@@ -75,6 +75,11 @@
                 <i class="bi bi-person-standing"></i> <span>Sholat</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('biaya') ?>">
+                <i class="bi bi-cash"></i> <span>Biaya</span>
+            </a>
+        </li>
         <hr>
 
         <li class="nav-item">

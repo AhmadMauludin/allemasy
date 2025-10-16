@@ -18,4 +18,18 @@ class KelasModel extends Model
         'status',
         'foto'
     ];
+
+    public function getPesdikByJenisTingkat($jenis_kelas, $tingkat = null)
+    {
+        $builder = $this->db->table('tb_kelas_pesdik kp')
+            ->join('tb_kelas k', 'kp.id_kelas = k.id_kelas')
+            ->select('kp.id_pesdik');
+
+        $builder->where('k.jenis_kelas', $jenis_kelas);
+        if ($tingkat && $tingkat != 'Semua') {
+            $builder->where('k.tingkat', $tingkat);
+        }
+
+        return $builder->get()->getResultArray();
+    }
 }
