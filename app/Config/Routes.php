@@ -229,3 +229,14 @@ $routes->get('transfer/edit/(:num)', 'Transfer::edit/$1');
 $routes->post('transfer/update/(:num)', 'Transfer::update/$1');
 $routes->get('transfer/delete/(:num)', 'Transfer::delete/$1');
 $routes->get('transfer/kirimNotif/(:num)', 'Transfer::kirimNotif/$1');
+
+$routes->group('tabungan', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Tabungan::index');
+    $routes->get('create', 'Tabungan::create');
+    $routes->post('store', 'Tabungan::store');
+    $routes->get('edit/(:num)', 'Tabungan::edit/$1');
+    $routes->post('update/(:num)', 'Tabungan::update/$1');
+    $routes->get('delete/(:num)', 'Tabungan::delete/$1');
+    $routes->get('detail/(:num)', 'Tabungan::detail/$1'); // ✅ baru
+    $routes->get('kirimNotif/(:num)', 'Tabungan::kirimNotif/$1');
+});

@@ -81,8 +81,13 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('tabungan') ?>">
+                <i class="bi bi-wallet"></i> <span>tabungan</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="<?= base_url('transfer') ?>">
-                <i class="bi bi-send"></i> <span>transfer</span>
+                <i class="bi bi-send"></i> <span>Transfer</span>
             </a>
         </li>
         <hr>

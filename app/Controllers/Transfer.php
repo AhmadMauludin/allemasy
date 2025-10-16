@@ -17,21 +17,51 @@ class Transfer extends BaseController
     public function index()
     {
         $role = session('role');
-        $id_pesdik = session('id_pesdik'); // pastikan ini sesuai id_pesdik dari session
+        $id_pesdik = session('id_pesdik');
 
-        $builder = $this->transferModel->select('tb_transfer.*, tb_user.username AS nama_verifikator, tb_pesdik.nama as nama_pesdik');
-        $builder->join('tb_pesdik', 'tb_transfer.id_pesdik = tb_pesdik.id_pesdik', 'left');
-        $builder->join('tb_user', 'tb_transfer.verifikator = tb_user.id_user', 'left');
+        // Ambil input pencarian
+        $keyword = $this->request->getGet('keyword');
+        $tanggal = $this->request->getGet('tanggal');
+        $peruntukan = $this->request->getGet('peruntukan');
 
+        // Pagination setup
+        $perPage = 10;
+        $page = (int)($this->request->getVar('page') ?? 1);
+
+        $builder = $this->transferModel
+            ->select('tb_transfer.*, tb_user.username AS nama_verifikator, tb_pesdik.nama as nama_pesdik')
+            ->join('tb_pesdik', 'tb_transfer.id_pesdik = tb_pesdik.id_pesdik', 'left')
+            ->join('tb_user', 'tb_transfer.verifikator = tb_user.id_user', 'left');
 
         if ($role === 'pesdik') {
             $builder->where('tb_transfer.id_pesdik', $id_pesdik);
         }
 
-        $data['transfer'] = $builder->orderBy('tb_transfer.id_transfer', 'DESC')->findAll();
+        // Filter pencarian
+        if ($keyword) {
+            $builder->like('tb_pesdik.nama', $keyword);
+        }
+
+        if ($tanggal) {
+            $builder->like('DATE(tb_transfer.waktu_transfer)', $tanggal);
+        }
+
+        if ($peruntukan) {
+            $builder->where('tb_transfer.peruntukan', $peruntukan);
+        }
+
+        $data['transfer'] = $builder
+            ->orderBy('tb_transfer.id_transfer', 'DESC')
+            ->paginate($perPage, 'transfer');
+
+        $data['pager'] = $this->transferModel->pager;
+        $data['keyword'] = $keyword;
+        $data['tanggal'] = $tanggal;
+        $data['peruntukan'] = $peruntukan;
 
         return view('transfer/index', $data);
     }
+
 
     // CREATE FORM (hanya pesdik)
     public function create()
