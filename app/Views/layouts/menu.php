@@ -80,6 +80,11 @@
                 <i class="bi bi-cash"></i> <span>Biaya</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('transfer') ?>">
+                <i class="bi bi-send"></i> <span>transfer</span>
+            </a>
+        </li>
         <hr>
 
         <li class="nav-item">

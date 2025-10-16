@@ -220,3 +220,12 @@ $routes->get('biaya/delete/(:num)', 'Biaya::delete/$1'); // Hapus biaya
 // Routes Pembayaran
 $routes->get('pembayaran/edit/(:num)', 'Pembayaran::edit/$1');   // Form edit pembayaran
 $routes->post('pembayaran/update/(:num)', 'Pembayaran::update/$1'); // Update pembayaran
+
+// Transfer
+$routes->get('transfer', 'Transfer::index');
+$routes->get('transfer/create', 'Transfer::create');
+$routes->post('transfer/store', 'Transfer::store');
+$routes->get('transfer/edit/(:num)', 'Transfer::edit/$1');
+$routes->post('transfer/update/(:num)', 'Transfer::update/$1');
+$routes->get('transfer/delete/(:num)', 'Transfer::delete/$1');
+$routes->get('transfer/kirimNotif/(:num)', 'Transfer::kirimNotif/$1');

@@ -27,12 +27,11 @@ CREATE TABLE `tb_biaya` (
   `jenis_biaya` enum('sekolah','pesantren','lainnya') NOT NULL,
   `peruntukan` varchar(255) NOT NULL,
   `tingkat` enum('1','2','3','4','5','6','Semua') NOT NULL,
-  `id_tahun_ajaran` int(11) NOT NULL,
   `biaya` decimal(15,2) NOT NULL,
   `status_biaya` enum('nonaktif','aktif') DEFAULT 'aktif',
   `keterangan_biaya` text DEFAULT NULL,
   PRIMARY KEY (`id_biaya`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +40,7 @@ CREATE TABLE `tb_biaya` (
 
 LOCK TABLES `tb_biaya` WRITE;
 /*!40000 ALTER TABLE `tb_biaya` DISABLE KEYS */;
+INSERT INTO `tb_biaya` VALUES (3,'sekolah','Uang Kegiatan Sekolah Kelas XI','5',100000.00,'aktif','bayar');
 /*!40000 ALTER TABLE `tb_biaya` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -522,12 +522,10 @@ CREATE TABLE `tb_pembayaran` (
   `bukti` varchar(255) DEFAULT NULL,
   `waktu_bayar` datetime DEFAULT NULL,
   `keterangan_bayar` text DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id_pembayaran`),
   KEY `id_biaya` (`id_biaya`),
   CONSTRAINT `tb_pembayaran_ibfk_1` FOREIGN KEY (`id_biaya`) REFERENCES `tb_biaya` (`id_biaya`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -536,6 +534,7 @@ CREATE TABLE `tb_pembayaran` (
 
 LOCK TABLES `tb_pembayaran` WRITE;
 /*!40000 ALTER TABLE `tb_pembayaran` DISABLE KEYS */;
+INSERT INTO `tb_pembayaran` VALUES (4,3,3,'dibayar','tunai','1760601342_f261c0b8cfbd4ac4a576.jpg',NULL,'mantap'),(5,3,4,'belum dibayar',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `tb_pembayaran` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -662,7 +661,7 @@ CREATE TABLE `tb_pesdik` (
 
 LOCK TABLES `tb_pesdik` WRITE;
 /*!40000 ALTER TABLE `tb_pesdik` DISABLE KEYS */;
-INSERT INTO `tb_pesdik` VALUES (3,7,'Saheela Meera','p','0031759504','1809599101','2025-10-09','08118881111','emailsiswa@gmail.com','Cisitu Sumedang','aktif','1760023465_38d02643611e0d4cb31d.jpg'),(4,9,'Siti Fadhilah Kamelia','p','0031759505','1809599102','2025-10-07','08118881111','emailsiswa@gmail.com','Rancakalong Sumedang','aktif','1760023937_c8bf45f3cda97fb53767.jpg');
+INSERT INTO `tb_pesdik` VALUES (3,7,'Saheela Meera','p','0031759504','1809599101','2025-10-09','085175017991','emailsiswa@gmail.com','Cisitu Sumedang','aktif','1760023465_38d02643611e0d4cb31d.jpg'),(4,9,'Siti Fadhilah Kamelia','p','0031759505','1809599102','2025-10-07','08118881111','emailsiswa@gmail.com','Rancakalong Sumedang','aktif','1760023937_c8bf45f3cda97fb53767.jpg');
 /*!40000 ALTER TABLE `tb_pesdik` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -819,6 +818,39 @@ INSERT INTO `tb_tahun_ajaran` VALUES (1,'2025/2026','ganjil','aktif'),(2,'2025/2
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_transfer`
+--
+
+DROP TABLE IF EXISTS `tb_transfer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_transfer` (
+  `id_transfer` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pesdik` int(11) NOT NULL,
+  `peruntukan` enum('bekal','biaya sekolah','biaya pesantren','biaya lainnya') NOT NULL,
+  `jumlah` decimal(15,2) NOT NULL,
+  `bukti_transfer` varchar(255) NOT NULL,
+  `status_transfer` enum('pending','diterima','ditolak') DEFAULT 'pending',
+  `waktu_transfer` datetime DEFAULT current_timestamp(),
+  `keterangan_transfer` text DEFAULT NULL,
+  `verifikator` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_transfer`),
+  KEY `id_pesdik` (`id_pesdik`),
+  CONSTRAINT `tb_transfer_ibfk_1` FOREIGN KEY (`id_pesdik`) REFERENCES `tb_pesdik` (`id_pesdik`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_transfer`
+--
+
+LOCK TABLES `tb_transfer` WRITE;
+/*!40000 ALTER TABLE `tb_transfer` DISABLE KEYS */;
+INSERT INTO `tb_transfer` VALUES (2,3,'bekal',300000.00,'1760611613_a194c27858f142df7f8e.jpg','diterima','2025-10-16 17:46:53','kanggo 3 minggu\r\n[mira]',1);
+/*!40000 ALTER TABLE `tb_transfer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_tugas`
 --
 
@@ -919,4 +951,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-16 12:58:36
+-- Dump completed on 2025-10-16 18:08:50
