@@ -1,18 +1,17 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container mt-4">
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <p class="mb-0">Data Kontrak Jadwal</h2>
-        </div>
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <p class="mb-0">Data Kontrak Jadwal</p>
+        <?php if (session()->get('role') == 'admin') : ?>
+            <a href="<?= base_url('kontrak/create'); ?>" class="btn btn-light btn-sm">Tambah Kontrak Jadwal</a>
+        <?php endif; ?>
+    </div>
+    <div class="card-body">
         <div class="card-body">
             <?php if (session()->getFlashdata('success')): ?>
                 <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
-            <?php endif; ?>
-
-            <?php if (session()->get('role') == 'admin') : ?>
-                <a href="<?= base_url('kontrak/create'); ?>" class="btn btn-primary mb-3">Tambah Kontrak Jadwal</a>
             <?php endif; ?>
 
             <table class="table table-striped">

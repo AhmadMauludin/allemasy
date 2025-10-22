@@ -38,6 +38,7 @@ class Filters extends BaseFilters
         // Tambahan Ini
         'auth'          => \App\Filters\AuthFilter::class,
         'role'          => \App\Filters\RoleFilter::class,
+        'owner'         => \App\Filters\OwnerFilter::class,
     ];
 
     /**

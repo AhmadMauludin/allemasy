@@ -4,6 +4,10 @@
 <div class="container mt-4">
     <h2 class="mb-4 fw-bold text-primary"><?= esc($title) ?></h2>
 
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+    <?php endif; ?>
+
     <?php if ($role === 'admin'): ?>
         <div class="row g-3">
             <?php

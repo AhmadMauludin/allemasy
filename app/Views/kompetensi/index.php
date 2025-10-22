@@ -4,6 +4,7 @@
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
         <span>Data Komspanetensi</span>
+        <a href="<?= base_url('kompetensi/create'); ?>" class="btn btn-light btn-sm">Tambah Kompetensi</a>
     </div>
     <div class="card-body">
 
@@ -11,7 +12,7 @@
             <div class="alert alert-success"><?= session('success') ?></div>
         <?php endif; ?>
 
-        <a href="<?= base_url('kompetensi/create'); ?>" class="btn btn-primary mb-3">Tambah Kompetensi</a>
+
 
         <table class="table table-striped align-middle">
             <thead class="table-light">

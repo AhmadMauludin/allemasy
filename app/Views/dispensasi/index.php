@@ -3,7 +3,10 @@
 
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-        <span>Data Dispensasi</span>
+        <p class="mb-0">Data Dispensasi</p>
+        <?php if (session()->get('role') == 'admin'): ?>
+            <a href="<?= base_url('dispensasi/create'); ?>" class="btn btn-sm btn-light">Tambah Dispensasi</a>
+        <?php endif; ?>
     </div>
     <div class="card-body">
 
